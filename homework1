@@ -10,20 +10,19 @@
         <ol>
             <li>
                 <label for="question1">What is Statistics and its relationship with other disciplines. Difference between Descriptive and Inferential Statistics.</label>
-                <input type="text" id="question1" name="question1" size="50">
             </li>
-   **Statistics** is the mathematical science involving the collection, analysis, and interpretation of data³. It has a vital relationship with various disciplines:
+   Statistics is the mathematical science involving the collection, analysis, and interpretation of data³. It has a vital relationship with various disciplines:
 
-   - **Economics**: Statistics plays a crucial role in economics. It is used in various parts of economics like demand, supply, wages, interest, prices, profits, rents savings, investments, unemployment etc. Various laws such as law of consumption, of returns or distribution of incomes and profits are often used in Economics¹.
-   - **Planning**: Planning is mainly a part of economics. We have to make different planning for different components for different periods. In almost all the spheres, whether those are individual, joint or any government decisions, nothing can be done without success and success cannot be attained without planning and planning cannot be undertaken without statistics¹.
-   - **Business and Commerce**: These activities such as trading, manufacturing, banking, transportation, mining, insurance or such other activities are undertaken for making profits. Statistics helps us to a great extent in planning, analysing and executing the plans¹.
-   - **State Administration**: Various departments of a government use it for their benefits and proper success of the departments held¹.
+   - Economics: Statistics plays a crucial role in economics. It is used in various parts of economics like demand, supply, wages, interest, prices, profits, rents savings, investments, unemployment etc. Various laws such as law of consumption, of returns or distribution of incomes and profits are often used in Economics¹.
+   - Planning: Planning is mainly a part of economics. We have to make different planning for different components for different periods. In almost all the spheres, whether those are individual, joint or any government decisions, nothing can be done without success and success cannot be attained without planning and planning cannot be undertaken without statistics¹.
+   - Business and Commerce: These activities such as trading, manufacturing, banking, transportation, mining, insurance or such other activities are undertaken for making profits. Statistics helps us to a great extent in planning, analysing and executing the plans¹.
+   - State Administration: Various departments of a government use it for their benefits and proper success of the departments held¹.
    - Other fields include Actuarial science, Astrostatistics, Biostatistics, Business analytics, Chemometrics, Demography, Econometrics, Environmental statistics, Epidemiology, Forensic statistics, Spatial statistics Geostatistics, Jurimetrics, Machine learning and Operations research².
 
-   The difference between **Descriptive** and **Inferential Statistics** is as follows:
+   The difference between Descriptive and Inferential Statistics is as follows:
 
-   - **Descriptive Statistics**: This branch aims to describe a chunk of raw data using summary statistics, graphs, and tables. Descriptive statistics are useful because they allow you to understand a group of data much more quickly and easily compared to just staring at rows and rows of raw data values⁴. Descriptive statistics describe a sample. You simply take a group that you’re interested in, record data about the group members, and then use summary statistics and graphs to present the group properties⁵.
-   - **Inferential Statistics**: Inferential statistics allow scientists to take findings from a sample group and generalize them to a larger population⁶. Inferential statistics makes inferences about a larger population⁵.
+   - Descriptive Statistics: This branch aims to describe a chunk of raw data using summary statistics, graphs, and tables. Descriptive statistics are useful because they allow you to understand a group of data much more quickly and easily compared to just staring at rows and rows of raw data values⁴. Descriptive statistics describe a sample. You simply take a group that you’re interested in, record data about the group members, and then use summary statistics and graphs to present the group properties⁵.
+   - Inferential Statistics: Inferential statistics allow scientists to take findings from a sample group and generalize them to a larger population⁶. Inferential statistics makes inferences about a larger population⁵.
 
 (1) Statistics | Definition, Types, & Importance | Britannica. https://www.britannica.com/science/statistics.
 (2) Relation of Statistics with other Sciences - Economics Discussion. https://www.economicsdiscussion.net/articles/relation-of-statistics-with-other-sciences/2323.
@@ -33,14 +32,13 @@
 (6) Descriptive vs. Inferential Statistics - ThoughtCo. https://www.thoughtco.com/differences-in-descriptive-and-inferential-statistics-3126224.
             <li>
                 <label for="question2">Describe the concepts of Population, Sample Attribute, Variable, Level of measurement and Dataset.</label>
-                <input type="text" id="question2" name="question2" size="50">
             </li>
-1) **Population**: In statistics, a population is the complete set of items from which a statistical sample is drawn for a study¹. It can be a group of individuals, a set of items, etc. It makes up the data pool for a study⁴.
-2) **Sample**: A sample refers to a smaller, manageable version of a larger group. It is a subset containing the characteristics of a larger population⁵. Samples are used in statistical testing when population sizes are too large for the test to include all possible members or observations⁵.
-3) **Attribute**: In data analysis or data mining, an attribute is a characteristic or feature that is measured for each observation (record) and can vary from one observation to another[^10^]. It might be measured in continuous values (e.g., time spent on a website), or in categorical values (e.g., red, yellow, green)[^10^].
-4) **Variable**: In statistical research, a variable is defined as an attribute of an object of study¹³. Choosing which variables to measure is central to good experimental design¹³. A variable is any characteristic, number, or quantity that can be measured or counted¹⁶.
-5) **Level of Measurement**: There are four levels of measurement: nominal, ordinal, interval and ratio. The level of measurement can influence the choice of statistical methods used to analyze the data, as some methods may be more appropriate for certain types of data than others¹⁷.
-6) **Dataset**: A dataset (or data set) is a collection of data. In the case of tabular data, a dataset corresponds to one or more database tables, where every column of a table represents a particular variable, and each row corresponds to a given record of the dataset in question²². The dataset lists values for each of the variables for each member of the dataset²².
+1) Population: In statistics, a population is the complete set of items from which a statistical sample is drawn for a study¹. It can be a group of individuals, a set of items, etc. It makes up the data pool for a study⁴.
+2) Sample: A sample refers to a smaller, manageable version of a larger group. It is a subset containing the characteristics of a larger population⁵. Samples are used in statistical testing when population sizes are too large for the test to include all possible members or observations⁵.
+3) Attribute: In data analysis or data mining, an attribute is a characteristic or feature that is measured for each observation (record) and can vary from one observation to another[^10^]. It might be measured in continuous values (e.g., time spent on a website), or in categorical values (e.g., red, yellow, green)[^10^].
+4) Variable: In statistical research, a variable is defined as an attribute of an object of study¹³. Choosing which variables to measure is central to good experimental design¹³. A variable is any characteristic, number, or quantity that can be measured or counted¹⁶.
+5) Level of Measurement: There are four levels of measurement: nominal, ordinal, interval and ratio. The level of measurement can influence the choice of statistical methods used to analyze the data, as some methods may be more appropriate for certain types of data than others¹⁷.
+6) Dataset: A dataset (or data set) is a collection of data. In the case of tabular data, a dataset corresponds to one or more database tables, where every column of a table represents a particular variable, and each row corresponds to a given record of the dataset in question²². The dataset lists values for each of the variables for each member of the dataset²².
 
 (1) Population Definition in Statistics and How to Measure It - Investopedia. https://www.investopedia.com/terms/p/population.asp.
 (2) Population vs Sample: Definitions, and Differences [Updated] - Simplilearn. https://www.simplilearn.com/tutorials/machine-learning-tutorial/population-vs-sample.
@@ -73,19 +71,18 @@
 (29) undefined. http://epp.eurostat.ec.europa.eu/portal/page/portal/statistics/a_to_z.
             <li>
                 <label for="question3">Briefly describe the main sampling methods</label>
-                <input type="text" id="question3" name="question3" size="50">
             </li>
 
-  **Probability Sampling**: This involves random selection, allowing you to make strong statistical inferences about the whole group¹. There are several types of probability sampling methods:
+  Probability Sampling: This involves random selection, allowing you to make strong statistical inferences about the whole group¹. There are several types of probability sampling methods:
 
-   - **Simple Random Sample**: Every member of a population has an equal chance of being selected to be in the sample⁴⁵.
-   - **Stratified Random Sample**: The population is first split into groups. The overall sample consists of some members from every group. The members from each group are chosen randomly².
-   - **Cluster Random Sample**: The population is first split into groups. The overall sample consists of every member from some of the groups. The groups are selected at random².
+   - Simple Random Sample: Every member of a population has an equal chance of being selected to be in the sample⁴⁵.
+   - Stratified Random Sample: The population is first split into groups. The overall sample consists of some members from every group. The members from each group are chosen randomly².
+   - Cluster Random Sample: The population is first split into groups. The overall sample consists of every member from some of the groups. The groups are selected at random².
 
- **Non-Probability Sampling**: This involves non-random selection based on convenience or other criteria, allowing you to easily collect data¹. There are several types of non-probability sampling methods:
+ Non-Probability Sampling: This involves non-random selection based on convenience or other criteria, allowing you to easily collect data¹. There are several types of non-probability sampling methods:
 
-   - **Convenience Sample**: The researcher chooses a sample that is readily available in some non-random way².
-   - **Voluntary Response Sample**: The researcher puts out a request for members of a population to join the sample, and people decide whether or not to be in the sample².
+   - Convenience Sample: The researcher chooses a sample that is readily available in some non-random way².
+   - Voluntary Response Sample: The researcher puts out a request for members of a population to join the sample, and people decide whether or not to be in the sample².
 
 Each method has its own strengths and weaknesses, and the choice of which to use will depend on the specific circumstances of the research.
 
@@ -96,15 +93,15 @@ Each method has its own strengths and weaknesses, and the choice of which to use
 (5) Types of Sampling Methods | Random Sampling, Non-Random Sampling - BYJU'S. https://byjus.com/commerce/types-of-sampling-methods/.
             <li>
                 <label for="question4">Briefly describe the main experiment designs</label>
-                <input type="text" id="question4" name="question4" size="50">
+                
             </li>
-1) **Pre-experimental Research Design**: This is the simplest form of experimental research design. It is often used to test the effects of a treatment on a group³.
-2) **True-experimental Research Design**: This is the most accurate form of experimental research design as it relies on the statistical hypothesis to prove or disprove the hypothesis³.
-3) **Quasi-Experimental Design**: This type of design does not randomly assign subjects to treatment and control groups, making it less reliable for establishing cause-and-effect relationships³.
-4) **Randomised Block Design**: This design is used when the experimenter wishes to control the variation in an experiment that is related to differences in test units³.
-5) **Completely Randomised Design**: In this design, all experimental units have an equal chance of receiving any treatment³.
-6) **Between-Subjects Designs**: In a between-subjects design, the various experimental treatments are given to different groups of subjects¹.
-7) **Factorial Design**: An experiment might have just one independent variable or it might have several. This section describes basic experimental designs and their advantages and disadvantages¹.
+1) Pre-experimental Research Design: This is the simplest form of experimental research design. It is often used to test the effects of a treatment on a group³.
+2) True-experimental Research Design: This is the most accurate form of experimental research design as it relies on the statistical hypothesis to prove or disprove the hypothesis³.
+3) Quasi-Experimental Design: This type of design does not randomly assign subjects to treatment and control groups, making it less reliable for establishing cause-and-effect relationships³.
+4) Randomised Block Design: This design is used when the experimenter wishes to control the variation in an experiment that is related to differences in test units³.
+5) Completely Randomised Design: In this design, all experimental units have an equal chance of receiving any treatment³.
+6) Between-Subjects Designs: In a between-subjects design, the various experimental treatments are given to different groups of subjects¹.
+7) Factorial Design: An experiment might have just one independent variable or it might have several. This section describes basic experimental designs and their advantages and disadvantages¹.
 
 Each design has its own strengths and weaknesses, and the choice of which to use will depend on the specific circumstances of the research.
 
