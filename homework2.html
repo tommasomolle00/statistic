@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Homework 2</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        ol{
+          font-size:20px;
+        }
+    </style>
+</head>
+  
+<body>
+    <h1>Homework 2</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+        <ol>
+            <li>
+                <label for="question1">
+                    <span class="bold-text">Choose 3 variables from our surveys:</span>
+                    <br>
+                    - One qualitative
+                    <br>
+                    - One quantitative discrete
+                    <br>
+                    - One quantitative continuous
+                </label>
+            </li>
+              <br>
+          <p>
+                Create the most efficient algorithms to compute the frequency (absolute/relative/percentage) distribution of:
+              <br>
+              - The 3 variables
+              <br>
+              - The joint distribution of 2 variables
+          </p>
+              <br>
+        </ol>
+    </form>
+</body>
+</html>
+
+<ul>
+  <p>
+  As qualitative variable I chose the variable <code class="language-plaintext highlighter-rouge">Background degree</code> from the survey <code class="language-plaintext highlighter-rouge">Professional life</code>.
+  As discrete quantitative variable I chose the variable <code class="language-plaintext highlighter-rouge">Ambitious</code> from the survey <code class="language-plaintext highlighter-rouge">Professional life</code>. In our survey the answer to this question is a number from 0 to 5, <strong>where we can assume</strong> that 0 means <code class="language-plaintext highlighter-rouge">Not at all</code> and 5 means <code class="language-plaintext highlighter-rouge">Very much</code>.
+  As continuous quantitative variable I chose the variable <code class="language-plaintext highlighter-rouge">Height</code> from the survey <code class="language-plaintext highlighter-rouge">Personal life</code>.
+
+Here is the code to compute the frequency distribution and the joint distribution of the variables:</p>
+
+<pre><code class="language-javascript">
+
+const fs = require('fs');
+
+function calculateFrequencies(text) {
+  const frequencies = {};
+
+  const lines = text.split('\n');
+
+  for (const line of lines) {
+    const item = line.toLowerCase().trim();
+
+    if (frequencies[item]) {
+      frequencies[item]++;
+    } else {
+      frequencies[item] = 1;
+    }
+  }
+
+  return frequencies;
+}
+
+function printFrequencies(frequencies, title) {
+  console.log(`\n${title}\n`);
+  const total = Object.values(frequencies).reduce((acc, value) => acc + value, 0);
+
+  for (const item in frequencies) {
+    const frequency = frequencies[item];
+    const relativeFrequency = frequency / total;
+    const percentage = (relativeFrequency * 100).toFixed(2);
+
+    console.log(`${item}: ${frequency} (Relative: ${relativeFrequency.toFixed(2)}, Percentage: ${percentage}%)`);
+  }
+}
+
+function calculateJointDistribution(dataArrays) {
+  const jointDistribution = {};
+
+  const numVariables = dataArrays.length;
+
+  for (let i = 0; i < dataArrays[0].length; i++) {
+    const values = dataArrays.map((dataArray) =>
+      dataArray[i].toLowerCase().trim()
+    );
+
+    const key = values.join('|');
+
+    if (!jointDistribution[key]) {
+      jointDistribution[key] = 1;
+    } else {
+      jointDistribution[key]++;
+    }
+  }
+
+  return jointDistribution;
+}
+
+function printJointDistribution(jointDistribution, title) {
+  console.log(`\n${title}\n`);
+  for (const key in jointDistribution) {
+    const frequency = jointDistribution[key];
+    const values = key.split('|');
+    const total = Object.values(jointDistribution).reduce(
+      (acc, value) => acc + value,
+      0
+    );
+    const relativeFrequency = frequency / total;
+    const percentage = (relativeFrequency * 100).toFixed(2);
+
+    console.log(
+      `Data: ${values.join(', ')} \t Frequency: ${frequency}, Relative Frequency: ${relativeFrequency.toFixed(2)}%, Percentage: ${percentage}%`
+    );
+  }
+}
+
+fs.readFile('degrees.txt', 'utf8', (err1, degreesData) => {
+  if (err1) {
+    console.error('Errore nella lettura del file "degrees.txt"', err1);
+    return;
+  }
+
+  fs.readFile('ambitiousness.txt', 'utf8', (err2, ambitiousnessData) => {
+    if (err2) {
+      console.error('Errore nella lettura del file "ambitiousness.txt"', err2);
+      return;
+    }
+
+    fs.readFile('heights.txt', 'utf8', (err3, heightsData) => {
+      if (err3) {
+        console.error('Errore nella lettura del file "heights.txt"', err3);
+        return;
+      }
+
+      const heightsFrequencies = calculateFrequencies(heightsData);
+      printFrequencies(heightsFrequencies, '---Height Frequencies---');
+
+      const degreesFrequencies = calculateFrequencies(degreesData);
+      printFrequencies(degreesFrequencies, '---Background Degree Frequencies---');
+
+      const valuesFrequencies = calculateFrequencies(ambitiousnessData);
+      printFrequencies(valuesFrequencies, '---Ambitious Values Frequencies---');
+
+      const jointDistribution = calculateJointDistribution([
+        ambitiousnessData.split('\n'),
+        heightsData.split('\n')
+      ]);
+      printJointDistribution(jointDistribution, '---Joint Distribution of Ambitiousness and Height (Data: A | H)---');
+    });
+  });
+});
+</pre></code>
+
+<p>Here is the output of the program:</p>
+
+<pre><code class="language-txt">---Height Frequencies---
+
+180: 1 (Relative: 0.02, Percentage: 1.75%)
+: 40 (Relative: 0.70, Percentage: 70.18%)
+1.73: 2 (Relative: 0.04, Percentage: 3.51%)
+1.76: 2 (Relative: 0.04, Percentage: 3.51%)
+1.8: 1 (Relative: 0.02, Percentage: 1.75%)
+1.72: 1 (Relative: 0.02, Percentage: 1.75%)
+1.68: 1 (Relative: 0.02, Percentage: 1.75%)
+1.81: 1 (Relative: 0.02, Percentage: 1.75%)
+1.86: 1 (Relative: 0.02, Percentage: 1.75%)
+1.71: 1 (Relative: 0.02, Percentage: 1.75%)
+1.65: 1 (Relative: 0.02, Percentage: 1.75%)
+1.9: 1 (Relative: 0.02, Percentage: 1.75%)
+1.7: 1 (Relative: 0.02, Percentage: 1.75%)
+1.78: 1 (Relative: 0.02, Percentage: 1.75%)
+1.91: 1 (Relative: 0.02, Percentage: 1.75%)
+1.82: 1 (Relative: 0.02, Percentage: 1.75%)
+
+---Background Degree Frequencies---
+
+engineering in computer science: 2 (Relative: 0.04, Percentage: 3.77%)
+computer and system engineering: 1 (Relative: 0.02, Percentage: 1.89%)
+computer science: 29 (Relative: 0.55, Percentage: 54.72%)
+computer science and engineering: 1 (Relative: 0.02, Percentage: 1.89%)
+computer engineering: 11 (Relative: 0.21, Percentage: 20.75%)
+software and information engineering: 1 (Relative: 0.02, Percentage: 1.89%)
+information engineering, computer science and statistics: 1 (Relative: 0.02, Percentage: 1.89%)
+computer sciwence: 1 (Relative: 0.02, Percentage: 1.89%)
+international relations: 1 (Relative: 0.02, Percentage: 1.89%)
+cybersecurity: 3 (Relative: 0.06, Percentage: 5.66%)
+security of information technologies: 1 (Relative: 0.02, Percentage: 1.89%)
+conputer engineering: 1 (Relative: 0.02, Percentage: 1.89%)
+
+---Ambitious Values Frequencies---
+
+3: 5 (Relative: 0.09, Percentage: 9.43%)
+4: 19 (Relative: 0.36, Percentage: 35.85%)
+5: 28 (Relative: 0.53, Percentage: 52.83%)
+6: 1 (Relative: 0.02, Percentage: 1.89%)
+
+---Joint Distribution of Ambitiousness and Height (Data: A | H)---
+
+Data: 4,  	 Frequency: 13, Relative Frequency: 0.25%, Percentage: 24.53%
+Data: 5,  	 Frequency: 22, Relative Frequency: 0.42%, Percentage: 41.51%
+Data: 5, 1.73 	 Frequency: 2, Relative Frequency: 0.04%, Percentage: 3.77%
+Data: 5, 1.76 	 Frequency: 2, Relative Frequency: 0.04%, Percentage: 3.77%
+Data: 4, 1.8 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 5, 1.72 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 4, 1.68 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 4, 1.81 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 6,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 5, 1.86 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 4, 1.71 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 3,  	 Frequency: 4, Relative Frequency: 0.08%, Percentage: 7.55%
+Data: 4, 180 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 3, 1.65 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: 4, 1.9 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+</code></pre>
+
+<p>We can also calculate the joint distribution of 3 variables, just by adding another array to the <code class="language-plaintext highlighter-rouge">calculateJointDistribution</code> function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">jointDistributions</span> <span class="o">=</span> <span class="nx">calculateJointDistribution</span><span class="p">([</span><span class="nx">degreesData</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">),</span> <span class="nx">ambitiousnessData</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">),</span> <span class="nx">heightsData</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">)]);</span>
+<span class="nx">printJointDistribution</span><span class="p">(</span><span class="nx">jointDistributions</span><span class="p">,</span> <span class="dl">'</span><span class="s1">---Joint Distribution OF 3 VARIABLES---</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>In this way <strong>we are not limited to 2 variables</strong>, but we can calculate the joint distribution of any number of variables.</p>
+
+<p>This is the output of this new method (note that we use the same method to print the joint distribution of 2 variables):</p>
+
+<pre><code class="language-txt">---Joint Distribution OF 3 VARIABLES---
+
+Data: engineering in computer science, 4,  	 Frequency: 2, Relative Frequency: 0.04%, Percentage: 3.77%
+Data: computer and system engineering, 5,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 5, 1.73 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science and engineering, 5,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 5, 1.76 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: software and information engineering, 5, 1.76 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 5,  	 Frequency: 3, Relative Frequency: 0.06%, Percentage: 5.66%
+Data: computer engineering, 5, 1.73 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 4, 1.8 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 4,  	 Frequency: 5, Relative Frequency: 0.09%, Percentage: 9.43%
+Data: computer science, 5, 1.72 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 5,  	 Frequency: 16, Relative Frequency: 0.30%, Percentage: 30.19%
+Data: computer engineering, 4, 1.68 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 4, 1.81 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 6,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 5, 1.86 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 4, 1.71 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 3,  	 Frequency: 3, Relative Frequency: 0.06%, Percentage: 5.66%
+Data: information engineering, computer science and statistics, 4,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer sciwence, 4, 180 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer science, 3, 1.65 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: international relations, 4,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: cybersecurity, 4,  	 Frequency: 2, Relative Frequency: 0.04%, Percentage: 3.77%
+Data: security of information technologies, 5,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 4, 1.9 	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: computer engineering, 4,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: conputer engineering, 4,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+Data: cybersecurity, 3,  	 Frequency: 1, Relative Frequency: 0.02%, Percentage: 1.89%
+</code></pre>
+
+<p>Let’s take a look now at the C# program to calculate the same distributions:</p>
+
+<pre><code class="language-C#">
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        string projectDirectory = "YOUR PROJECT DIRECTORY";
+        
+        string degreesPath = Path.Combine(projectDirectory, "degrees.txt");
+        string ambitiousnessPath = Path.Combine(projectDirectory, "ambitiousness.txt");
+        string heightsPath = Path.Combine(projectDirectory, "heights.txt");
+
+        string degreesData = File.ReadAllText(degreesPath);
+        string ambitiousnessData = File.ReadAllText(ambitiousnessPath);
+        string heightsData = File.ReadAllText(heightsPath);
+
+        Dictionary<string, int> heightsFrequencies = CalculateFrequencies(heightsData);
+        PrintFrequencies(heightsFrequencies, "---Height Frequencies---");
+
+        Dictionary<string, int> degreesFrequencies = CalculateFrequencies(degreesData);
+        PrintFrequencies(degreesFrequencies, "---Background Degree Frequencies---");
+
+        Dictionary<string, int> ambitiousnessFrequencies = CalculateFrequencies(ambitiousnessData);
+        PrintFrequencies(ambitiousnessFrequencies, "---Ambitious Values Frequencies---");
+
+        List<string[]> dataArrays = new List<string[]>
+        {
+            ambitiousnessData.Split('\n'),
+            heightsData.Split('\n')
+        };
+
+        Dictionary<string, int> jointDistribution = CalculateJointDistribution(dataArrays);
+        PrintJointDistribution(jointDistribution, "---Joint Distribution of Ambitiousness and Height (Data: A | H)---");
+
+        dataArrays.Add(degreesData.Split('\n'));
+
+        Dictionary<string, int> jointDistributions = CalculateJointDistribution(dataArrays);
+        PrintJointDistribution(jointDistributions, "---Joint Distribution OF 3 VARIABLES---");
+    }
+
+    static Dictionary<string, int> CalculateFrequencies(string text)
+    {
+        var frequencies = new Dictionary<string, int>();
+        var lines = text.Split('\n');
+
+        foreach (var line in lines)
+        {
+            var item = line.ToLower().Trim();
+
+            if (frequencies.ContainsKey(item))
+            {
+                frequencies[item]++;
+            }
+            else
+            {
+                frequencies[item] = 1;
+            }
+        }
+
+        return frequencies;
+    }
+
+    static void PrintFrequencies(Dictionary<string, int> frequencies, string title)
+    {
+        Console.WriteLine($"\n{title}\n");
+        int total = frequencies.Values.Sum();
+
+        foreach (var item in frequencies)
+        {
+            double relativeFrequency = (double)item.Value / total;
+            double percentage = relativeFrequency * 100;
+            Console.WriteLine($"{item.Key}: {item.Value} (Relative: {relativeFrequency:F2}, Percentage: {percentage:F2}%)");
+        }
+    }
+
+    static Dictionary<string, int> CalculateJointDistribution(List<string[]> dataArrays)
+    {
+        var jointDistribution = new Dictionary<string, int>();
+        int numVariables = dataArrays.Count;
+
+        for (int i = 0; i < dataArrays[0].Length; i++)
+        {
+            var values = dataArrays.Select(dataArray => dataArray[i].ToLower().Trim()).ToList();
+            var key = string.Join("|", values);
+
+            if (jointDistribution.ContainsKey(key))
+            {
+                jointDistribution[key]++;
+            }
+            else
+            {
+                jointDistribution[key] = 1;
+            }
+        }
+
+        return jointDistribution;
+    }
+
+    static void PrintJointDistribution(Dictionary<string, int> jointDistribution, string title)
+    {
+        Console.WriteLine($"\n{title}\n");
+        int total = jointDistribution.Values.Sum();
+
+        foreach (var item in jointDistribution)
+        {
+            var values = item.Key.Split('|');
+            double relativeFrequency = (double)item.Value / total;
+            double percentage = relativeFrequency * 100;
+            Console.WriteLine($"Data: {string.Join(", ", values)} \t Frequency: {item.Value}, Relative Frequency: {relativeFrequency:F2}, Percentage: {percentage:F2}%");
+        }
+    }
+}
+
+</pre></code>
+
+<p>We obtain the following output:</p>
+
+<pre><code class="language-txt">---Height Frequencies---
+
+: 40 (Relative: 0,70, Percentage: 70,18%)
+1.73: 2 (Relative: 0,04, Percentage: 3,51%)
+1.76: 2 (Relative: 0,04, Percentage: 3,51%)
+1.8: 1 (Relative: 0,02, Percentage: 1,75%)
+1.72: 1 (Relative: 0,02, Percentage: 1,75%)
+1.68: 1 (Relative: 0,02, Percentage: 1,75%)
+1.81: 1 (Relative: 0,02, Percentage: 1,75%)
+1.86: 1 (Relative: 0,02, Percentage: 1,75%)
+1.71: 1 (Relative: 0,02, Percentage: 1,75%)
+180: 1 (Relative: 0,02, Percentage: 1,75%)
+1.65: 1 (Relative: 0,02, Percentage: 1,75%)
+1.9: 1 (Relative: 0,02, Percentage: 1,75%)
+1.7: 1 (Relative: 0,02, Percentage: 1,75%)
+1.78: 1 (Relative: 0,02, Percentage: 1,75%)
+1.91: 1 (Relative: 0,02, Percentage: 1,75%)
+1.82: 1 (Relative: 0,02, Percentage: 1,75%)
+
+---Background Degree Frequencies---
+
+engineering in computer science: 2 (Relative: 0,04, Percentage: 3,77%)
+computer and system engineering: 1 (Relative: 0,02, Percentage: 1,89%)
+computer science: 29 (Relative: 0,55, Percentage: 54,72%)
+computer science and engineering: 1 (Relative: 0,02, Percentage: 1,89%)
+computer engineering: 11 (Relative: 0,21, Percentage: 20,75%)
+software and information engineering: 1 (Relative: 0,02, Percentage: 1,89%)
+information engineering, computer science and statistics: 1 (Relative: 0,02, Percentage: 1,89%)
+computer sciwence: 1 (Relative: 0,02, Percentage: 1,89%)
+international relations: 1 (Relative: 0,02, Percentage: 1,89%)
+cybersecurity: 3 (Relative: 0,06, Percentage: 5,66%)
+security of information technologies: 1 (Relative: 0,02, Percentage: 1,89%)
+conputer engineering: 1 (Relative: 0,02, Percentage: 1,89%)
+
+---Ambitious Values Frequencies---
+
+4: 19 (Relative: 0,36, Percentage: 35,85%)
+5: 28 (Relative: 0,53, Percentage: 52,83%)
+6: 1 (Relative: 0,02, Percentage: 1,89%)
+3: 5 (Relative: 0,09, Percentage: 9,43%)
+
+---Joint Distribution of Ambitiousness and Height (Data: A | H)---
+
+Data: 4,         Frequency: 13, Relative Frequency: 0,25, Percentage: 24,53%
+Data: 5,         Frequency: 22, Relative Frequency: 0,42, Percentage: 41,51%
+Data: 5, 1.73    Frequency: 2, Relative Frequency: 0,04, Percentage: 3,77%
+Data: 5, 1.76    Frequency: 2, Relative Frequency: 0,04, Percentage: 3,77%
+Data: 4, 1.8     Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 5, 1.72    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 4, 1.68    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 4, 1.81    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 6,         Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 5, 1.86    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 4, 1.71    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 3,         Frequency: 4, Relative Frequency: 0,08, Percentage: 7,55%
+Data: 4, 180     Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 3, 1.65    Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: 4, 1.9     Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+
+---Joint Distribution OF 3 VARIABLES---
+
+Data: engineering in computer science, 4,        Frequency: 2, Relative Frequency: 0,04, Percentage: 3,77%
+Data: computer and system engineering, 5,        Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 5, 1.73          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science and engineering, 5,       Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 5, 1.76      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: software and information engineering, 5, 1.76      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 5,           Frequency: 3, Relative Frequency: 0,06, Percentage: 5,66%
+Data: computer engineering, 5, 1.73      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 4, 1.8   Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 4,       Frequency: 5, Relative Frequency: 0,09, Percentage: 9,43%
+Data: computer science, 5, 1.72          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 5,       Frequency: 16, Relative Frequency: 0,30, Percentage: 30,19%
+Data: computer engineering, 4, 1.68      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 4, 1.81          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 6,           Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 5, 1.86      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 4, 1.71      Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 3,       Frequency: 3, Relative Frequency: 0,06, Percentage: 5,66%
+Data: information engineering, computer science and statistics, 4,       Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer sciwence, 4, 180          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer science, 3, 1.65          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: international relations, 4,        Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: cybersecurity, 4,          Frequency: 2, Relative Frequency: 0,04, Percentage: 3,77%
+Data: security of information technologies, 5,           Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 4, 1.9       Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: computer engineering, 4,           Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: conputer engineering, 4,           Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+Data: cybersecurity, 3,          Frequency: 1, Relative Frequency: 0,02, Percentage: 1,89%
+
+</code></pre>
+</ul>
+
+    <form>
+        <ol start="2">
+            <li>
+                <label for="question2">
+                    <span class="bold-text">For the following most important data structures (or others that you may want to suggest) find out how to:</span>
+                    <br>
+                    - Loop (break/continue)
+                    <br>
+                    - add/remove/get/set/check the existence of key/value
+                    <br>
+                </label>
+            </li>
+              <br><p>
+                Data structures: array, list, dictionary, sorted list, hashset, sortedset, queue, stack, linkedlist (or any other structure you think to be useful).
+                <br>
+                Note in a very concise way your finding in your Js Cheatsheet, and, in case a corresponding Js object does not exists, create a simple equivalent class with all necessary corresponding methods.
+              <br></p>
+        </ol>
+    </form>
+      
+      <a href="https://github.com/tommasomolle00/statistic/cheatsheet.html">Clicca qui per vedere il Cheatsheet</a>
+      <br>
+      <br>
+      
+      <form>
+        <ol start="3">
+            <li>
+                <label for="question3">
+                    <span class="bold-text">Generate N uniform random variates in [0,1) and determine the distribution into class intervals [i/k, (i+1)/k), i = 0,..., k-1.
+                      <br>
+                      Play with N and k values and draw some conclusion on the "shape" of the distribution.</span>
+                    <br>
+                </label>
+              <p> In Javascript: </p>
+              <pre><code class="language-javascript">
+  function generateRandomUniformVariates(N, k) {
+  const data = [];
+  const counts = Array(k).fill(0);
+
+  for (let i = 0; i < N; i++) {
+    const randomValue = Math.random(); // Generate a random number in [0, 1)
+    const interval = Math.floor(randomValue * k);
+    counts[interval]++;
+    data.push(randomValue);
+  }
+
+  return { data, counts };
+}
+
+// Vary N and k as needed
+const N = 10000;
+const k = 10;
+
+const { data, counts } = generateRandomUniformVariates(N, k);
+
+// You can analyze 'data' and 'counts' to draw conclusions about the distribution.
+console.log(data);
+console.log(counts);
+
+              </code></pre>
+              
+              <p>In C#:</p>
+              <pre><code class="language-C#">
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static (List<double> data, int[] counts) GenerateRandomUniformVariates(int N, int k)
+    {
+        List<double> data = new List<double>();
+        int[] counts = new int[k];
+
+        Random random = new Random();
+
+        for (int i = 0; i < N; i++)
+        {
+            double randomValue = random.NextDouble(); // Generate a random number in [0, 1)
+            int interval = (int)(randomValue * k);
+            counts[interval]++;
+            data.Add(randomValue);
+        }
+
+        return (data, counts);
+    }
+
+    static void Main(string[] args)
+    {
+        // Vary N and k as needed
+        int N = 10000;
+        int k = 10;
+
+        (List<double> data, int[] counts) = GenerateRandomUniformVariates(N, k);
+
+        // You can analyze 'data' and 'counts' to draw conclusions about the distribution.
+    }
+}
+
+              </code></pre>
+            </li>
+    </ul>
+
