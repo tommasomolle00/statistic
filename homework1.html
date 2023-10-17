@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+    
 <head>
     <meta http-equiv='cache-control' content='no-cache'> 
         <meta http-equiv='expires' content='0'> 
@@ -94,7 +101,7 @@ Each design has its own strengths and weaknesses, and the choice of which to use
                 <label for="question5" style="font-size: 16px; font-weight: bold;">Write a program in C# or VB.NET that creates a window containing a single line, point, circle, rectangle:</label>
             </li>
 
-<pre><code>
+<pre><code class="language-C#">
 
 using System;
 using System.Drawing;
@@ -192,7 +199,7 @@ class DrawingForm : Form
 </ol>
             <pre><code>
     <pre>
-        <code>
+        <code class="language-javascript">
             // Get a reference to the canvas element
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
