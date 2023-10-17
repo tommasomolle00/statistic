@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Homework 2</title>
+<head>
+    <title>Data Structures Cheatsheet</title>
+</head>
+
+<style>
+
+h1{
+font-size: 34px;
+}
+p{
+font-size: 18px;
+}
+h2{
+font-size: 26px;
+}
+h3{
+font-size:18px;
+}
+</style>
+
+<body>
+<ul>
+    <h1>Data Structures Cheatsheet</h1>
+
+</body>
+
+</html>
+
+<div class="post-content">
+    <h2 id="javascript-cheatsheet">Javascript cheatsheet</h2>
+
+<p>
+<strong>Array</strong>:
+</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Using JavaScript array</span>
+<span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="c1">// Loop</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">element</span> <span class="k">of</span> <span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Add/Remove</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+
+<span class="c1">// Get</span>
+<span class="kd">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="c1">// Check Existence</span>
+<span class="kd">const</span> <span class="nx">exists</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>
+<strong>List (Equivalent to Array)</strong>:
+</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// JavaScript array used as a list</span>
+<span class="kd">const</span> <span class="nx">myList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>
+<strong>Dictionary (Equivalent to Object)</strong>:
+</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Using JavaScript object</span>
+<span class="kd">const</span> <span class="nx">dict</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">key1</span><span class="p">:</span> <span class="dl">'</span><span class="s1">value1</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">key2</span><span class="p">:</span> <span class="dl">'</span><span class="s1">value2</span><span class="dl">'</span>
+<span class="p">};</span>
+
+<span class="c1">// Loop</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">dict</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">dict</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="c1">// Add/Remove/Get</span>
+<span class="nx">dict</span><span class="p">.</span><span class="nx">key3</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">value3</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">delete</span> <span class="nx">dict</span><span class="p">.</span><span class="nx">key1</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">dict</span><span class="p">.</span><span class="nx">key2</span><span class="p">;</span>
+
+<span class="c1">// Check Existence</span>
+<span class="kd">const</span> <span class="nx">exists</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">key1</span><span class="dl">'</span> <span class="k">in</span> <span class="nx">dict</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>
+<strong>Sorted List (Custom Class)</strong>:
+</p>
+
+<p>We use JavaScript’s built-in <code class="language-plaintext highlighter-rouge">Array</code> class to implement a SortedList. We use the <code class="language-plaintext highlighter-rouge">sort</code> method to sort the array.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">SortedList</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="p">}</span>
+
+  <span class="nx">add</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">remove</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">get</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">sortedList</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SortedList</span><span class="p">();</span>
+<span class="nx">sortedList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="nx">sortedList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">sortedList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>
+<strong>HashSet (Custom Class)</strong>:
+</p>
+
+<p>We use JavaScript’s built-in <code class="language-plaintext highlighter-rouge">Set</code> class to implement a HashSet.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">HashSet</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">add</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">remove</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">hashSet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HashSet</span><span class="p">();</span>
+<span class="nx">hashSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">hashSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="nx">hashSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>
+<strong>Sorted Set (Custom Class)</strong>:
+</p>
+
+<p>We use JavaScript’s built-in <code class="language-plaintext highlighter-rouge">Set</code> class to implement a SortedSet. We use a separate array to store the sorted elements.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">SortedSet</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="p">}</span>
+
+  <span class="nx">add</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">remove</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="kd">const</span> <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">get</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">sortedArray</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="kd">set</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">sortedSet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SortedSet</span><span class="p">();</span>
+<span class="nx">sortedSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="nx">sortedSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">sortedSet</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>
+<strong>Queue</strong> and <strong>Stack</strong> (Using JavaScript array):
+</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Queue</span>
+<span class="kd">const</span> <span class="nx">queue</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">queue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">// Enqueue</span>
+<span class="kd">const</span> <span class="nx">dequeued</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>  <span class="c1">// Dequeue</span>
+
+<span class="c1">// Stack</span>
+<span class="kd">const</span> <span class="nx">stack</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">// Push onto the stack</span>
+<span class="kd">const</span> <span class="nx">popped</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>  <span class="c1">// Pop from the stack</span>
+</code></pre></div></div>
+
+<p>
+<strong>Linked List (Custom Class)</strong>:
+</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Node</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">LinkedList</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">head</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">append</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">newNode</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">head</span> <span class="o">=</span> <span class="nx">newNode</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="kd">let</span> <span class="nx">current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">current</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">current</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">newNode</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">remove</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">head</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="kd">let</span> <span class="nx">current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">current</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">current</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">contains</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">current</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">current</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">current</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">linkedList</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LinkedList</span><span class="p">();</span>
+<span class="nx">linkedList</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">linkedList</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="nx">linkedList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div></div>
+
+<br>
+<div class="post-content">
+    <h2 id="csharp-cheatsheet">C# Cheatsheet</h2>
+
+    <h3 id="array">Array:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# array
+int[] arr = { 1, 2, 3 };
+
+// Loop
+foreach (int element in arr)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+List&lt;int&gt; list = new List&lt;int&gt;(arr);
+list.Add(4);
+list.RemoveAt(2);
+
+// Get
+int value = arr[1];
+
+// Check Existence
+bool exists = arr.Contains(2);
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="list">List:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# List
+List&lt;int&gt; list = new List&lt;int&gt; { 1, 2, 3 };
+
+// Loop
+foreach (int element in list)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+list.Add(4);
+list.RemoveAt(0);
+
+// Get
+int value = list[2];
+
+// Check Existence
+bool exists = list.Contains(3);
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="dictionary">Dictionary:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# Dictionary
+Dictionary&lt;string, int&gt; dict = new Dictionary&lt;string, int&gt;();
+dict.Add("one", 1);
+dict.Add("two", 2);
+dict.Add("three", 3);
+
+// Loop
+foreach (var pair in dict)
+{
+    Console.WriteLine(pair.Key + ": " + pair.Value);
+}
+
+// Add/Remove
+dict["four"] = 4;
+dict.Remove("two");
+
+// Get
+int value;
+if (dict.TryGetValue("three", out value))
+{
+    Console.WriteLine("Value of 'three': " + value);
+}
+
+// Check Existence
+bool exists = dict.ContainsKey("two");
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="sortedlist">Sorted List:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# SortedList
+SortedList&lt;int, string&gt; sortedList = new SortedList&lt;int, string&gt;();
+sortedList.Add(3, "Three");
+sortedList.Add(1, "One");
+sortedList.Add(2, "Two");
+
+// Loop
+foreach (var pair in sortedList)
+{
+    Console.WriteLine(pair.Key + ": " + pair.Value);
+}
+
+// Add/Remove
+sortedList.Add(4, "Four");
+sortedList.Remove(2);
+
+// Get
+string value;
+if (sortedList.TryGetValue(1, out value))
+{
+    Console.WriteLine("Value at key 1: " + value);
+}
+
+// Check Existence
+bool exists = sortedList.ContainsKey(2);
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="hashset">HashSet:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# HashSet
+HashSet&lt;int&gt; hashSet = new HashSet&lt;int&gt;();
+hashSet.Add(1);
+hashSet.Add(2);
+hashSet.Add(3);
+
+// Loop
+foreach (int element in hashSet)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+hashSet.Add(4);
+hashSet.Remove(2);
+
+// Check Existence
+bool exists = hashSet.Contains(3);
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="sortedset">SortedSet:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# SortedSet
+SortedSet&lt;int&gt; sortedSet = new SortedSet&lt;int&gt;();
+sortedSet.Add(3);
+sortedSet.Add(1);
+sortedSet.Add(2);
+
+// Loop
+foreach (int element in sortedSet)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+sortedSet.Add(4);
+sortedSet.Remove(2);
+
+// Check Existence
+bool exists = sortedSet.Contains(1);
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="queue">Queue:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# Queue
+Queue&lt;string&gt; queue = new Queue&lt;string&gt;();
+queue.Enqueue("First");
+queue.Enqueue("Second");
+queue.Enqueue("Third");
+
+// Loop
+foreach (string element in queue)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+queue.Enqueue("Fourth");
+queue.Dequeue();
+
+// Check Existence (not applicable, use Dequeue/Peek)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="stack">Stack:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# Stack
+Stack&lt;string&gt; stack = new Stack&lt;string&gt;();
+stack.Push("First");
+stack.Push("Second");
+stack.Push("Third");
+
+// Loop
+foreach (string element in stack)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+stack.Push("Fourth");
+stack.Pop();
+
+// Check Existence (not applicable, use Pop/Peek)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3 id="linkedlist">Linked List:</h3>
+    <div class="language-csharp highlighter-rouge">
+        <div class="highlight">
+            <pre class="highlight">
+                <code>
+// Using C# LinkedList
+LinkedList&lt;string&gt; linkedList = new LinkedList&lt;string&gt;();
+linkedList.AddLast("First");
+linkedList.AddLast("Second");
+linkedList.AddLast("Third");
+
+// Loop
+foreach (string element in linkedList)
+{
+    Console.WriteLine(element);
+}
+
+// Add/Remove
+linkedList.AddLast("Fourth");
+linkedList.RemoveFirst();
+
+// Check Existence (not applicable, use Remove/Add)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+</body>
+</ul>
+</html>
+
