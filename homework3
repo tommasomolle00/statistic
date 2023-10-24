@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Homework 2</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        ol{
+          font-size:20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Homework 3</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+        <ol>
+                <label for="question1">
+                    <span class="bold-text">Exercise 1</span>
+                    <br>
+                    Part a:
+                    <br>
+                    M systems are subject to a series of N attacks. On the x-axis, we indicate the attacks and on the Y-axis we
+                    simulate the accumulation of a "security score" (-1, 1), where the score is -1 if the system is penetrated
+                    and 1 if the system was successfully "shielded" or protected. Simulate the score "trajectories" for all systems,
+                    assuming, for simplicity, a constant penetration probability p at each attack.
+                    <br>
+                </label>
+            
+              <br>
+          <p>
+                Part b:
+              <br>
+              Same as before, but simulate the cumulated frequency, say f, of penetration. Do the same with the relative
+              frequency f/number of attacks and the "normalized" ratio: f/ √number of attacks.
+              <br>
+              For any of the above 4 charts (which will be actually an instance of a unique "object", from a coder's point of view), plot
+              a vertical histogram at some point x (day or attack number, user parameter) and at the last abscissa
+              value and make your personal considerations on the shape of the distributions.
+              Make sure that each animation is enclosed into a "frame" (a rectangle) resizable by the user, by using the mouse
+              (you can make a separate, reusable, "ResizableRectangle" object for that).
+          </p>
+              <br>
+              Discussion point:
+              Is what you see what you expected? What about the averages of the distributions and the shapes of the histograms:
+              do you see regularities, differences and can you attempt to explain what you see or guessing what are
+              the "theoretical" limit distribution, when as N increases, and you can make the distribution simulation "more detailed" by increasing M ?
+          <p>
+              <br>
+<br>
+
+        <div class="centered">
+            <p>
+                <label for="M"> <b>Number of systems (M):</b></label>
+                <input type="number" id="M" value="5" min="1">
+            </p>
+                <p>
+                <label for="N"><b>Number of attacks (N):</b></label>
+                <input type="number" id="N" value="10" min="1"> 
+            </p>
+            <p>
+                <label for="p"b> <b>Penetration probability (p):</b> </label>
+                <input type="number" id="p" value="0.5" step="0.01" min="0" max="1">
+            </p>
+            <p>
+                <label for="attackNumber"> <b>Attack number to analyze: </b></label>
+                <input type="number" id="attackNumber" value="5" min="0" max="10">
+            </p>
+            <br>
+
+            <p>
+                Click on the button below tu update all the charts
+            </p>
+
+                <button onclick="updateAllCharts()">Update Chart</button>
+
+        
+        </div>
+
+        <br>
+<h3>Security score</h3>
+<div class="canvas-container">
+            <canvas id="securityChartOriginal" width="800" height="400"></canvas>
+        </div>
+<h3>Cumulative frequency</h3>
+        <div class="canvas-container">
+            <canvas id="securityChart1b" width="800" height="400"></canvas>
+        </div>
+<h3>Relative frequency</h3>
+        <div class="canvas-container">
+            <canvas id="securityChart1c" width="800" height="400"></canvas>
+        </div>
+<h3>Normalized frequency</h3>
+        <div class="canvas-container">
+            <canvas id="securityChart1d" width="800" height="400"></canvas>
+        </div>
+
+<script>
+                    
+                        const canvasOriginal = document.getElementById('securityChartOriginal');
+                        const canvas1b = document.getElementById('securityChart1b');
+                        const canvas1c = document.getElementById('securityChart1c');
+                        const canvas1d = document.getElementById('securityChart1d');
+
+                        const ctxOriginal = canvasOriginal.getContext('2d');
+                        const ctx1b = canvas1b.getContext('2d');
+                        const ctx1c = canvas1c.getContext('2d');
+                        const ctx1d = canvas1d.getContext('2d');
+
+                        const scaleFactor = 0.9; // Adjust this value as needed, where 1 is full size and 0.5 is half size, etc.
+
+                        let isDragging = false;
+                        let startX, startY;
+
+                        function startDrag(e) {
+                            isDragging = true;
+                            startX = e.clientX;
+                            startY = e.clientY;
+                        }
+
+                        function drag(e) {
+                            if (!isDragging) return;
+
+                            const dx = e.clientX - startX;
+                            const dy = e.clientY - startY;
+
+                            const style = e.target.parentElement.style;
+                            style.left = (parseInt(style.left || 0) + dx) + 'px'; // Fixed syntax error here
+                            style.top = (parseInt(style.top || 0) + dy) + 'px'; // Fixed syntax error here
+
+                            startX = e.clientX;
+                            startY = e.clientY;
+                        }
+
+
+                        function stopDrag() {
+                            isDragging = false;
+                        }
+
+
+                        const canvasContainers = document.querySelectorAll('.canvas-container');
+                        canvasContainers.forEach(container => {
+                            container.addEventListener('resize', function() {
+                                scaleCanvasContent(container.querySelector('canvas'));
+                            });
+                            container.addEventListener('mousedown', startDrag);
+                            container.addEventListener('mousemove', drag);
+                            container.addEventListener('mouseup', stopDrag);
+                            container.addEventListener('mouseleave', stopDrag); // Stops dragging if the mouse leaves the canvas
+                        });
+
+                        function scaleCanvasContent(canvas) {
+                            const ctx = canvas.getContext('2d');
+                            const tempCanvas = document.createElement('canvas');
+                            const tempCtx = tempCanvas.getContext('2d');
+                            tempCanvas.width = canvas.width;
+                            tempCanvas.height = canvas.height;
+                            tempCtx.drawImage(canvas, 0, 0);
+
+                            canvas.width = canvas.parentElement.clientWidth;
+                            canvas.height = canvas.parentElement.clientHeight;
+
+                            ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, canvas.width, canvas.height);
+                        }
+
+                        function simulateScore(N, p, type = "original") {
+                            let score = 0;
+                            const scores = [];
+                            for (let i = 0; i < N; i++) {
+                                const probability = Math.random();
+                                switch (type) {
+                                    case "original":
+                                        score += (probability < p) ? -1 : 1;
+                                        break;
+                                    case "1b":
+                                        score += (probability < p) ? 0 : 1;
+                                        break;
+                                    case "1c":
+                                        score += (probability < p) ? 0 : 1;
+                                        score /= (i + 1);
+                                        break;
+                                    case "1d":
+                                        score += (probability < p) ? 0 : 1;
+                                        score /= Math.sqrt(i + 1);
+                                        break;
+                                }
+                                scores.push(score);
+                            }
+                            return scores;
+                        }
+
+                        function countScoreIntervals(scores) {
+                            const intervals = {};
+                            for (let score of scores) {
+                                const intervalBase = Math.floor(score / 2) * 2;
+                                const intervalKey = `${intervalBase},${intervalBase + 2}`; // Use template literals
+                                intervals[intervalKey] = (intervals[intervalKey] || 0) + 1;
+                            }
+                            return intervals;
+                        }
+
+
+                        function generateColors(count) {
+                            const colors = [];
+                            for (let i = 0; i < count; i++) {
+                                colors.push(`hsl(${(i * 360) / count}, 100%, 50%)`); // Use backticks and quotes
+                            }
+                            return colors;
+                        }
+
+
+                        function drawChart(M, N, p, type, ctx, canvas) {
+                            const attackNumber = parseInt(document.getElementById('attackNumber').value);
+
+                            // Introduce scaling factor
+                            const chartWidth = canvas.width * scaleFactor ;  
+                            const chartHeight = canvas.height * scaleFactor;
+
+                            // Adjust for scaling factor
+                            const xOffset = 50;
+                            const yOffset = chartHeight / 2;
+                            const xScale = (chartWidth - xOffset) / N;
+                            const yScale = yOffset / N;
+
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            const allScores = [];
+
+                            const colors = generateColors(M);
+
+                        // Axis and labels
+                            ctx.strokeStyle = 'black';
+                            ctx.beginPath();
+                            ctx.moveTo(xOffset, 0);
+                            ctx.lineTo(xOffset, canvas.height);
+                            ctx.moveTo(xOffset, yOffset);
+                            ctx.lineTo(xOffset + chartWidth, yOffset);
+                            ctx.stroke();
+
+                            // Drawing horizontal lines for every y-value
+                            for (let i = -N; i <= N; i += 2) {
+                                ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';  // Light gray color for lines
+                                ctx.beginPath();
+                                ctx.moveTo(xOffset, yOffset - i * yScale);
+                                ctx.lineTo(xOffset + chartWidth, yOffset - i * yScale);
+                                ctx.stroke();
+                            }
+
+
+                            // Label the Y axis
+                            ctx.textAlign = "right";
+                            ctx.fillStyle = "black";
+                            for (let i = -N; i <= N; i += 2) {
+                                if (i === N) {
+                                    ctx.textBaseline = "top";  // Adjust for max value
+                                } else if (i === -N) {
+                                    ctx.textBaseline = "bottom";   // Adjust for min value
+                                } else {
+                                    ctx.textBaseline = "middle";
+                                }
+                                ctx.fillText(i, xOffset - 10, yOffset - i * yScale);
+                            }
+
+                            // Label the X axis
+                            ctx.textAlign = "center";
+                            ctx.textBaseline = "top";
+                            ctx.fillStyle = "black";
+                            for (let i = 1; i <= N; i++) {
+                                let horizontalAdjustment = 0;
+                                if (i === N) {
+                                    horizontalAdjustment = -15; // Adjust left for max value; change the value as needed
+                                }
+                                ctx.fillText(i, xOffset + i * xScale + horizontalAdjustment, yOffset + 10);
+                            }
+
+
+                            // Simulate scores for all M systems and plot them
+                            for (let system = 0; system < M; system++) {
+                                const scores = simulateScore(N, p, type);
+                                allScores.push(scores);
+                                ctx.strokeStyle = colors[system];
+                                ctx.beginPath();
+                                ctx.moveTo(xOffset, yOffset);
+
+                                for (let attack = 0; attack < N; attack++) {
+                                    ctx.lineTo(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale);
+
+                                    // Save the current context state
+                                    ctx.save();
+                                    // Drawing a circle for each point
+                                    ctx.arc(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale, 1, 0, 2 * Math.PI);
+                                    ctx.fillStyle = colors[system];
+                                    ctx.fill();
+                                    // Restore the context state to continue the line
+                                    ctx.restore();
+
+                                    // Move to the next point for line continuation
+                                    ctx.moveTo(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale);
+                                }
+
+                                ctx.stroke();
+                            }
+
+
+                            // Count the final scores for the histogram
+                            const endScores = allScores.map(scores => scores[N-1]);
+                            const intervals = countScoreIntervals(endScores);
+
+                            // Draw the histogram bars for each interval for the final scores
+                            const maxBarWidth = canvas.width - (xOffset + N * xScale);
+                            for (let intervalKey in intervals) {
+                                const [start, end] = intervalKey.split(',').map(Number);
+                                const midpoint = (start + end) / 2;
+                                const count = intervals[intervalKey];
+
+                                const barLength = (count / M) * maxBarWidth; 
+                                const barStartY = yOffset - midpoint * yScale;
+                                const barStartX = xOffset + N * xScale;  // Start at the last abscissa
+
+                                ctx.fillStyle = 'rgba(100, 100, 100, 0.5)';
+                                ctx.fillRect(barStartX, barStartY, barLength, yScale);
+                            }
+
+
+                            // Draw the histogram bars for the specific attack number
+                            const attackScores = allScores.map(scores => scores[attackNumber - 1]);
+                            const attackIntervals = countScoreIntervals(attackScores);
+
+                            for (let intervalKey in attackIntervals) {
+                                const [start, end] = intervalKey.split(',').map(Number);
+                                const midpoint = (start + end) / 2;
+                                const count = attackIntervals[intervalKey];
+
+                                const barLength = ((count / M) * maxBarWidth);
+                                const barStartY = yOffset - midpoint * yScale;
+                                const barStartX = xOffset + attackNumber * xScale ;
+
+                                ctx.fillStyle = 'rgba(100, 150, 255, 0.5)';
+                                ctx.fillRect(barStartX, barStartY, barLength, yScale);
+                            }
+                        }
+
+                        function updateChart() {
+                            const M = parseInt(document.getElementById('M').value);
+                            const N = parseInt(document.getElementById('N').value);
+                            const p = parseFloat(document.getElementById('p').value);
+                            drawChart(M, N, p);
+                        }
+
+                        function updateAllCharts() {
+                            const M = parseInt(document.getElementById('M').value);
+                            const N = parseInt(document.getElementById('N').value);
+                            const p = parseFloat(document.getElementById('p').value);
+
+                            drawChart(M, N, p, "original", ctxOriginal, canvasOriginal);
+                            drawChart(M, N, p, "1b", ctx1b, canvas1b);
+                            drawChart(M, N, p, "1c", ctx1c, canvas1c);
+                            drawChart(M, N, p, "1d", ctx1d, canvas1d);
+                        }
+
+                        window.onload = function() {
+                            updateAllCharts();
+                        };
+                    
+                
+</script>
+<br>
+<span class="bold-text"> Javascript: </span>
+
+<pre><code class="language-javascript">
+  const canvasOriginal = document.getElementById('securityChartOriginal');
+  const canvas1b = document.getElementById('securityChart1b');
+  const canvas1c = document.getElementById('securityChart1c');
+  const canvas1d = document.getElementById('securityChart1d');
+
+  const ctxOriginal = canvasOriginal.getContext('2d');
+  const ctx1b = canvas1b.getContext('2d');
+  const ctx1c = canvas1c.getContext('2d');
+  const ctx1d = canvas1d.getContext('2d');
+
+  const scaleFactor = 0.9; // Adjust this value as needed, where 1 is full size and 0.5 is half size, etc.
+
+  let isDragging = false;
+  let startX, startY;
+
+  function startDrag(e) {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+  }
+
+  function drag(e) {
+      if (!isDragging) return;
+
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      const style = e.target.parentElement.style;
+      style.left = (parseInt(style.left || 0) + dx) + 'px'; // Fixed syntax error here
+      style.top = (parseInt(style.top || 0) + dy) + 'px'; // Fixed syntax error here
+
+      startX = e.clientX;
+      startY = e.clientY;
+  }
+
+
+  function stopDrag() {
+      isDragging = false;
+  }
+
+
+  const canvasContainers = document.querySelectorAll('.canvas-container');
+  canvasContainers.forEach(container => {
+      container.addEventListener('resize', function() {
+          scaleCanvasContent(container.querySelector('canvas'));
+      });
+      container.addEventListener('mousedown', startDrag);
+      container.addEventListener('mousemove', drag);
+      container.addEventListener('mouseup', stopDrag);
+      container.addEventListener('mouseleave', stopDrag); // Stops dragging if the mouse leaves the canvas
+  });
+
+  function scaleCanvasContent(canvas) {
+      const ctx = canvas.getContext('2d');
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      tempCtx.drawImage(canvas, 0, 0);
+
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, canvas.width, canvas.height);
+  }
+
+  function simulateScore(N, p, type = "original") {
+      let score = 0;
+      const scores = [];
+      for (let i = 0; i < N; i++) {
+          const probability = Math.random();
+          switch (type) {
+              case "original":
+                  score += (probability < p) ? -1 : 1;
+                  break;
+              case "1b":
+                  score += (probability < p) ? 0 : 1;
+                  break;
+              case "1c":
+                  score += (probability < p) ? 0 : 1;
+                  score /= (i + 1);
+                  break;
+              case "1d":
+                  score += (probability < p) ? 0 : 1;
+                  score /= Math.sqrt(i + 1);
+                  break;
+          }
+          scores.push(score);
+      }
+      return scores;
+  }
+
+  function countScoreIntervals(scores) {
+      const intervals = {};
+      for (let score of scores) {
+          const intervalBase = Math.floor(score / 2) * 2;
+          const intervalKey = `${intervalBase},${intervalBase + 2}`; // Use template literals
+          intervals[intervalKey] = (intervals[intervalKey] || 0) + 1;
+      }
+      return intervals;
+  }
+
+
+  function generateColors(count) {
+      const colors = [];
+      for (let i = 0; i < count; i++) {
+          colors.push(`hsl(${(i * 360) / count}, 100%, 50%)`); // Use backticks and quotes
+      }
+      return colors;
+  }
+
+
+  function drawChart(M, N, p, type, ctx, canvas) {
+      const attackNumber = parseInt(document.getElementById('attackNumber').value);
+
+      // Introduce scaling factor
+      const chartWidth = canvas.width * scaleFactor ;  
+      const chartHeight = canvas.height * scaleFactor;
+
+      // Adjust for scaling factor
+      const xOffset = 50;
+      const yOffset = chartHeight / 2;
+      const xScale = (chartWidth - xOffset) / N;
+      const yScale = yOffset / N;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const allScores = [];
+
+      const colors = generateColors(M);
+
+  // Axis and labels
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.moveTo(xOffset, 0);
+      ctx.lineTo(xOffset, canvas.height);
+      ctx.moveTo(xOffset, yOffset);
+      ctx.lineTo(xOffset + chartWidth, yOffset);
+      ctx.stroke();
+
+      // Drawing horizontal lines for every y-value
+      for (let i = -N; i <= N; i += 2) {
+          ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';  // Light gray color for lines
+          ctx.beginPath();
+          ctx.moveTo(xOffset, yOffset - i * yScale);
+          ctx.lineTo(xOffset + chartWidth, yOffset - i * yScale);
+          ctx.stroke();
+      }
+
+
+      // Label the Y axis
+      ctx.textAlign = "right";
+      ctx.fillStyle = "black";
+      for (let i = -N; i <= N; i += 2) {
+          if (i === N) {
+              ctx.textBaseline = "top";  // Adjust for max value
+          } else if (i === -N) {
+              ctx.textBaseline = "bottom";   // Adjust for min value
+          } else {
+              ctx.textBaseline = "middle";
+          }
+          ctx.fillText(i, xOffset - 10, yOffset - i * yScale);
+      }
+
+      // Label the X axis
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "black";
+      for (let i = 1; i <= N; i++) {
+          let horizontalAdjustment = 0;
+          if (i === N) {
+              horizontalAdjustment = -15; // Adjust left for max value; change the value as needed
+          }
+          ctx.fillText(i, xOffset + i * xScale + horizontalAdjustment, yOffset + 10);
+      }
+
+
+      // Simulate scores for all M systems and plot them
+      for (let system = 0; system < M; system++) {
+          const scores = simulateScore(N, p, type);
+          allScores.push(scores);
+          ctx.strokeStyle = colors[system];
+          ctx.beginPath();
+          ctx.moveTo(xOffset, yOffset);
+
+          for (let attack = 0; attack < N; attack++) {
+              ctx.lineTo(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale);
+
+              // Save the current context state
+              ctx.save();
+              // Drawing a circle for each point
+              ctx.arc(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale, 1, 0, 2 * Math.PI);
+              ctx.fillStyle = colors[system];
+              ctx.fill();
+              // Restore the context state to continue the line
+              ctx.restore();
+
+              // Move to the next point for line continuation
+              ctx.moveTo(xOffset + (attack + 1) * xScale, yOffset - scores[attack] * yScale);
+          }
+
+          ctx.stroke();
+      }
+
+
+      // Count the final scores for the histogram
+      const endScores = allScores.map(scores => scores[N-1]);
+      const intervals = countScoreIntervals(endScores);
+
+      // Draw the histogram bars for each interval for the final scores
+      const maxBarWidth = canvas.width - (xOffset + N * xScale);
+      for (let intervalKey in intervals) {
+          const [start, end] = intervalKey.split(',').map(Number);
+          const midpoint = (start + end) / 2;
+          const count = intervals[intervalKey];
+
+          const barLength = (count / M) * maxBarWidth; 
+          const barStartY = yOffset - midpoint * yScale;
+          const barStartX = xOffset + N * xScale;  // Start at the last abscissa
+
+          ctx.fillStyle = 'rgba(100, 100, 100, 0.5)';
+          ctx.fillRect(barStartX, barStartY, barLength, yScale);
+      }
+
+
+      // Draw the histogram bars for the specific attack number
+      const attackScores = allScores.map(scores => scores[attackNumber - 1]);
+      const attackIntervals = countScoreIntervals(attackScores);
+
+      for (let intervalKey in attackIntervals) {
+          const [start, end] = intervalKey.split(',').map(Number);
+          const midpoint = (start + end) / 2;
+          const count = attackIntervals[intervalKey];
+
+          const barLength = ((count / M) * maxBarWidth);
+          const barStartY = yOffset - midpoint * yScale;
+          const barStartX = xOffset + attackNumber * xScale ;
+
+          ctx.fillStyle = 'rgba(100, 150, 255, 0.5)';
+          ctx.fillRect(barStartX, barStartY, barLength, yScale);
+      }
+  }
+
+  function updateChart() {
+      const M = parseInt(document.getElementById('M').value);
+      const N = parseInt(document.getElementById('N').value);
+      const p = parseFloat(document.getElementById('p').value);
+      drawChart(M, N, p);
+  }
+
+  function updateAllCharts() {
+      const M = parseInt(document.getElementById('M').value);
+      const N = parseInt(document.getElementById('N').value);
+      const p = parseFloat(document.getElementById('p').value);
+
+      drawChart(M, N, p, "original", ctxOriginal, canvasOriginal);
+      drawChart(M, N, p, "1b", ctx1b, canvas1b);
+      drawChart(M, N, p, "1c", ctx1c, canvas1c);
+      drawChart(M, N, p, "1d", ctx1d, canvas1d);
+  }
+
+  window.onload = function() {
+      updateAllCharts();
+  };
+
+</pre></code>
+
+<br>
+<span class="bold-text"> C#: </span>
+
+<pre><code class="language-C#">
+                    
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+class ChartDrawer : Form
+{
+    private int M;
+    private int N;
+    private double p;
+
+    private TextBox MTextBox;
+    private TextBox NTextBox;
+    private TextBox pTextBox;
+
+    public ChartDrawer()
+    {
+        Text = "Homework 3";
+        Size = new Size(800, 600);
+        DoubleBuffered = true;
+
+        MTextBox = new TextBox();
+        MTextBox.Text = "5";
+        MTextBox.Location = new Point(10, 10);
+
+        NTextBox = new TextBox();
+        NTextBox.Text = "10";
+        NTextBox.Location = new Point(10, 40);
+
+        pTextBox = new TextBox();
+        pTextBox.Text = "0.5";
+        pTextBox.Location = new Point(10, 70);
+
+        Controls.Add(MTextBox);
+        Controls.Add(NTextBox);
+        Controls.Add(pTextBox);
+
+        Paint += new PaintEventHandler(OnPaint);
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        base.OnPaint(e);
+
+        M = Convert.ToInt32(MTextBox.Text);
+        N = Convert.ToInt32(NTextBox.Text);
+        p = Convert.ToDouble(pTextBox.Text);
+
+        Graphics g = e.Graphics;
+        DrawChart(M, N, p, "original", g, ClientSize.Width, ClientSize.Height);
+    }
+
+    private void DrawChart(int M, int N, double p, string type, Graphics g, int width, int height)
+    {
+    private void DrawChart(int M, int N, double p, string type, Graphics g, int width, int height)
+{
+    // Calcola i fattori di scala
+    float xScale = (width - 100) / N;
+    float yScale = height / (2 * N);
+
+    // Definisci i colori
+    Color[] colors = GenerateColors(M);
+
+    // Disegna l'asse delle ordinate
+    Pen axisPen = new Pen(Color.Black);
+    g.DrawLine(axisPen, 50, 0, 50, height);
+    g.DrawLine(axisPen, 50, height / 2, width, height / 2);
+
+    // Disegna le linee orizzontali
+    Pen gridPen = new Pen(Color.LightGray, 1);
+    for (int i = -N; i <= N; i += 2)
+    {
+        g.DrawLine(gridPen, 50, height / 2 - i * yScale, width, height / 2 - i * yScale);
+    }
+
+    // Etichette sull'asse delle ordinate
+    Font labelFont = new Font("Arial", 10);
+    Brush labelBrush = new SolidBrush(Color.Black);
+    StringFormat labelFormat = new StringFormat();
+    labelFormat.Alignment = StringAlignment.Far;
+    labelFormat.LineAlignment = StringAlignment.Center;
+    for (int i = -N; i <= N; i += 2)
+    {
+        if (i == N || i == -N)
+            labelFormat.LineAlignment = StringAlignment.Near;
+        else
+            labelFormat.LineAlignment = StringAlignment.Center;
+        g.DrawString(i.ToString(), labelFont, labelBrush, 40, height / 2 - i * yScale, labelFormat);
+    }
+
+    // Etichette sull'asse delle ascisse
+    labelFormat.Alignment = StringAlignment.Center;
+    labelFormat.LineAlignment = StringAlignment.Far;
+    for (int i = 1; i <= N; i++)
+    {
+        float horizontalAdjustment = 0;
+        if (i == N)
+            horizontalAdjustment = -15;
+        g.DrawString(i.ToString(), labelFont, labelBrush, 50 + i * xScale + horizontalAdjustment, height / 2 + 10, labelFormat);
+    }
+
+    // Simula i punteggi e disegna il grafico
+    for (int system = 0; system < M; system++)
+    {
+        List scores = SimulateScore(N, p, type);
+        Pen linePen = new Pen(colors[system], 2);
+        for (int attack = 0; attack < N - 1; attack++)
+        {
+            float x1 = 50 + (attack * xScale);
+            float y1 = height / 2 - scores[attack] * yScale;
+            float x2 = 50 + ((attack + 1) * xScale);
+            float y2 = height / 2 - scores[attack + 1] * yScale;
+
+            g.DrawLine(linePen, x1, y1, x2, y2);
+        }
+    }
+}
+
+private List SimulateScore(int N, double p, string type)
+{
+    List scores = new List();
+    int score = 0;
+    for (int i = 0; i < N; i++)
+    {
+        double probability = new Random().NextDouble();
+        switch (type)
+        {
+            case "original":
+                score += (probability < p) ? -1 : 1;
+                break;
+            case "1b":
+                score += (probability < p) ? 0 : 1;
+                break;
+            case "1c":
+                score += (probability < p) ? 0 : 1;
+                score /= (i + 1);
+                break;
+            case "1d":
+                score += (probability < p) ? 0 : 1;
+                score /= (int)Math.Sqrt(i + 1);
+                break;
+        }
+        scores.Add(score);
+    }
+    return scores;
+}
+
+private Color[] GenerateColors(int count)
+{
+    Color[] colors = new Color[count];
+    for (int i = 0; i < count; i++)
+    {
+        int hue = (i * 360) / count;
+        colors[i] = ColorFromAhsb(255, hue, 1.0f, 0.5f);
+    }
+    return colors;
+}
+
+// Helper function to create a color from alpha, hue, saturation, and brightness values
+private Color ColorFromAhsb(int alpha, int hue, float saturation, float brightness)
+{
+    float fMax, fMid, fMin;
+    int hi = (int)(hue / 60.0) % 6;
+    float f = hue / 60.0f - hi;
+    float f1 = 1 - f;
+
+    fMax = brightness;
+    fMin = brightness * (1.0f - saturation);
+    fMid = brightness * (1.0f - f * saturation);
+
+    int red, green, blue;
+
+    red = green = blue = (int)(brightness * 255);
+
+    switch (hi)
+    {
+        case 0:
+            red = (int)(fMax * 255);
+            green = (int)(fMid * 255);
+            blue = (int)(fMin * 255);
+            break;
+        case 1:
+            red = (int)(fMid * 255);
+            green = (int)(fMax * 255);
+            blue = (int)(fMin * 255);
+            break;
+        case 2:
+            red = (int)(fMin * 255);
+            green = (int)(fMax * 255);
+            blue = (int)(fMax * 255);
+            break;
+        case 3:
+            red = (int)(fMin * 255);
+            green = (int)(fMid * 255);
+            blue = (int)(fMax * 255);
+            break;
+        case 4:
+            red = (int)(fMid * 255);
+            green = (int)(fMin * 255);
+            blue = (int)(fMax * 255);
+            break;
+        case 5:
+            red = (int)(fMax * 255);
+            green = (int)(fMin * 255);
+            blue = (int)(fMid * 255);
+            break;
+    }
+
+    return Color.FromArgb(alpha, red, green, blue);
+}
+
+
+    }
+
+    [STAThread]
+    public static void Main()
+    {
+        Application.Run(new ChartDrawer());
+    }
+}
+
+</pre></code>
+<br>
+                 <span class="bold-text">Exercise 2</span>
+              <br>
+              Recall briefly the definition and math notions relevant to "probability space" and make some simple examples, indicating among the triple of the space the meaning of each element in your particular example.
+              If you wanted to model probabilistically the homework Exercise 1, explain what are the 3 sets of your probability space and their elements, in this case.
+<br><br>
+<strong> Answer: </strong>
+<br>
+A probability space is a fundamental concept in probability theory and consists of three main components: a sample space, an event space, and a probability measure. 
+These components are essential for defining and understanding probability distributions and random experiments.
+<p>
+Sample Space (Ω): The sample space is the set of all possible outcomes of a random experiment. 
+It represents the complete set of possible results. In the context of your homework Exercise 1, the sample space would represent all possible sequences of attack outcomes for M systems subject to N attacks. 
+Each outcome in the sample space is a sequence of length N, where each element can be either -1 (penetration) or 1 (protection).</p>
+<p>
+For example, if you have two systems (M = 2) and three attacks (N = 3), the sample space might look like this:
+Ω = { (1, -1, 1), (1, 1, -1), (-1, -1, -1), ... }
+Here, each element in Ω represents a possible sequence of attack outcomes for the two systems over three attacks.</p>
+
+<p>
+Event Space (F): The event space is a collection of subsets of the sample space, representing different events or outcomes of interest. 
+These events can be simple (single outcomes) or compound (combinations of outcomes). In the context of Exercise 1, the event space would include specific sets of attack outcomes for the systems.
+For example, you could define events like:
+Event A: "At least one system is penetrated on every attack."
+Event B: "All systems are protected on every attack."
+These events are subsets of the sample space Ω. </p>
+
+<p>
+Probability Measure (P): The probability measure assigns a probability to each event in the event space. It specifies the likelihood of each event occurring. 
+The probability measure satisfies certain axioms, including that the probability of the entire sample space is 1 (P(Ω) = 1) and that probabilities are non-negative (P(E) ≥ 0 for any event E). </p>
+
+</p>
+          </p>
+        </ol>
+    </form>
+</body>
