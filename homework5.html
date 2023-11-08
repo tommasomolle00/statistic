@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Homework 5</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        ol{
+          font-size:20px;
+        }
+    </style>
+</head>
+  
+<body>
+    <h1>Homework 5</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+        <ol>
+            <li>
+                <label for="question1">
+                    <span class="bold-text"> 
+                      
+                    M servers are subject to attacks during a period of time T (for instance 1 year).
+                    Subdivide the interval T in N subinterval of size T/N and in each of this suppose that an attack can occur with probability λ T/N.
+                    Simulate the attacks to the M servers and represent each of them with a line which
+                    makes jumps of 1 at each attack event.
+                    <br>
+                    <br>
+                    Using the same objects ("movable/resizable rectangle", histogram, etc.) of the previous homework 3
+                    draw vertically on the line chart the 2 histograms representing the distribution of the number
+                    of attacks at the end of the period and one internal istant for comparison.
+                    Study what happens asymptotically, for N large, and a number of systems M a sufficient to give shape to
+                    a simulated distribution. Make some personal considerations about the shape and the average of the distributions that you see.
+                    <br>
+                    <br>
+                    Find out on the web about a Poisson point process. See if you can see any analogy with this Exercise and verify whether your distributions come close (for N, M sufficiently large)
+                    to the theoretical asymptotic distribution. </span>
+
+                    <br>
+                    <br>
+                </label>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
+
+
+<head>
+    <title>Tracciamento degli Attacchi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        canvas {
+            width: 100%;
+            height: 400px;
+            display: block;
+            margin: 20px 0;
+            border: 2px solid #000;
+            border-radius: 10px;
+        }
+
+        .axis-labels {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .axis-labels-x {
+            display: flex;
+            justify-content: center; /* Per centrare "Server" */
+            align-items: flex-end; /* Per spostarlo in basso */
+        }
+
+        .axis-labels-y {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 10px;
+        }
+
+        .statistics-label {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="numServers">Numero di Server (M):</label>
+        <input type="number" id="numServers" min="1" value="100">
+        <label for="numIntervals">Numero di Suddivisioni (N):</label>
+        <input type="number" id="numIntervals" min="1" value="100">
+        <label for="period">Periodo di tempo (T in giorni):</label>
+        <input type="number" id="period" min="1" value="365">
+        <label for="lambda">Probabilità  di Attacco:</label>
+        <input type number id="lambda" min="0" step="0.01" value="0.1">
+        <button id="generateChart">Genera Grafico</button>
+    </div>
+
+    <div class="axis-labels">
+        <canvas id="attackChart"></canvas>
+        <div class="axis-labels-x">
+            <div>Server</div>
+        </div>
+    </div>
+
+    <div id="probabilityMessage"></div>
+
+    <script>
+            document.getElementById('generateChart').addEventListener('click', () => {
+            const numServers = parseInt(document.getElementById('numServers').value, 10);
+            const numIntervals = parseInt(document.getElementById('numIntervals').value, 10);
+            const period = parseInt(document.getElementById('period').value, 10);
+            const lambda = parseFloat(document.getElementById('lambda').value);
+
+            generateChart(numServers, numIntervals, period, lambda);
+            showProbabilityMessage(lambda, period, numIntervals);
+        });
+
+        function showProbabilityMessage(lambda, T, N) {
+            const probability = lambda * T / N;
+            
+            document.getElementById('probabilityMessage').textContent = message;
+        }
+
+        function generateGrid(ctx, width, height, divX, divY){
+            ctx.strokeStyle = "grey"; // Colore rosso
+            ctx.lineWidth = 1; // Spessore 2 pixel
+
+            let currentX = 0;
+
+            for (let i = 0; i < width/divX; i++){
+                    // Inizia il percorso
+                    ctx.beginPath();
+                    // Muovi il contesto all'inizio della linea
+                    ctx.moveTo(currentX, height);
+
+                    // Disegna una linea fino alla posizione finale
+                    ctx.lineTo(currentX, 0);
+
+                    // Traccia la linea
+                    ctx.stroke();
+
+                    // Termina il percorso
+                    ctx.closePath();
+
+                    currentX += divX;
+            }
+
+            let currentY = 0;
+            for (let i = 0; i < width/divX; i++){
+                    // Inizia il percorso
+                    ctx.beginPath();
+                    // Muovi il contesto all'inizio della linea
+                    ctx.moveTo(0, currentY);
+
+                    // Disegna una linea fino alla posizione finale
+                    ctx.lineTo(width, currentY);
+
+                    // Traccia la linea
+                    ctx.stroke();
+
+                            // Termina il percorso
+                     ctx.closePath();
+
+                     currentY += divY;
+            }
+        }
+
+        function makeTrajectories(M, N, lambda){
+            const data = [];
+            for (let i = 0; i < M; i++) {
+                const serverAttacks = [];
+                let attackCount = 0;
+                for (let j = 0; j < N; j++) {
+                    if (Math.random() < lambda) {
+                        attackCount++;
+                    }
+                    serverAttacks.push(attackCount);
+                }
+                data.push(serverAttacks);
+            }
+
+            return data;
+        }
+
+        function generateChart(M, N, T, lambda) {
+            // Parametri
+            const canvas = document.getElementById('attackChart');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1500;
+            canvas.height = 400;
+            let offset = -50;
+
+            generateGrid(ctx, canvas.width, canvas.height, 20, 20);
+            // Prepara i dati delle traiettorie degli attacchi
+            const data = makeTrajectories(M, N, lambda);
+
+            // Disegna il grafico a linee
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const colors = generateRandomColors(M);
+            for (let i = 0; i < M; i++) {
+                const serverAttacks = data[i];
+
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                for (let j = 0; j < N; j++) {
+                    const x = (j * canvas.width) / (N - 1);
+                    const y = (canvas.height - (serverAttacks[j] / N) * canvas.height) + offset;
+                    console.log(y);
+                    ctx.lineTo(x, y);
+                    ctx.moveTo(x, y);
+                    ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                ctx.strokeStyle = colors[i];
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function generateRandomColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const color = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
+                colors.push(color);
+            }
+            return colors;
+        }
+
+
+        function generateHistogram(M, N, lambda) {
+  const canvas = document.getElementById('attackChart');
+  const ctx = canvas.getContext('2d');
+  const data = makeTrajectories(M, N, lambda);
+  const colors = generateRandomColors(N); // Colore per ogni colonna dell'istogramma
+  const barWidth = canvas.width / N;
+
+  // Calcola le frequenze degli attacchi in ciascuna delle N suddivisioni
+  const attackFrequencies = new Array(N).fill(0);
+  for (let i = 0; i < M; i++) {
+    const serverAttacks = data[i];
+    for (let j = 0; j < N; j++) {
+      attackFrequencies[j] += serverAttacks[j];
+    }
+  }
+
+  // Trova la massima frequenza per scalare l'istogramma
+  const maxFrequency = Math.max(...attackFrequencies);
+
+  // Disegna l'istogramma
+  for (let i = 0; i < N; i++) {
+    const barHeight = (attackFrequencies[i] / maxFrequency) * (canvas.height - 20);
+    const x = i * barWidth;
+    const y = canvas.height - barHeight;
+    ctx.fillStyle = colors[i];
+    //ctx.fillRect(x, y, barWidth, barHeight);
+    ctx.fillRect(canvas.width-100, canvas.height/2 + y,  Math.random() * 100 + 1, 5);
+  }
+}
+// Funzione per aggiornare il grafico quando gli input cambiano
+function updateChartOnChange() {
+  const numServersInput = document.getElementById('numServers');
+  const numIntervalsInput = document.getElementById('numIntervals');
+  const periodInput = document.getElementById('period');
+  const lambdaInput = document.getElementById('lambda');
+
+  numServersInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  numIntervalsInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  periodInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  lambdaInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+}
+
+// Chiamare la funzione updateChartOnChange() quando la pagina Ã¨ pronta
+window.onload = function () {
+  updateChartOnChange();
+  generateChart(); // Inizializza il grafico all'avvio
+  generateHistogram(); // Inizializza l'istogramma all'avvio
+};
+
+
+document.getElementById('generateChart').addEventListener('click', () => {
+    const numServers = parseInt(document.getElementById('numServers').value, 10);
+    const numIntervals = parseInt(document.getElementById('numIntervals').value, 10);
+    const period = parseInt(document.getElementById('period').value, 10);
+    const lambda = parseFloat(document.getElementById('lambda').value);
+
+    generateChart(numServers, numIntervals, period, lambda);
+    generateHistogram(numServers, numIntervals, lambda);
+    showProbabilityMessage(lambda, period, numIntervals);
+});
+
+    </script>
+</body>
+
+<span class="bold-text" style="font-size: 24px;">Javascript:</span>
+<pre><code class="language-javascript">
+        document.getElementById('generateChart').addEventListener('click', () => {
+        const numServers = parseInt(document.getElementById('numServers').value, 10);
+        const numIntervals = parseInt(document.getElementById('numIntervals').value, 10);
+        const period = parseInt(document.getElementById('period').value, 10);
+        const lambda = parseFloat(document.getElementById('lambda').value);
+
+        generateChart(numServers, numIntervals, period, lambda);
+        showProbabilityMessage(lambda, period, numIntervals);
+        });
+
+        function showProbabilityMessage(lambda, T, N) {
+            const probability = lambda * T / N;
+            
+            document.getElementById('probabilityMessage').textContent = message;
+        }
+
+        function generateGrid(ctx, width, height, divX, divY){
+            ctx.strokeStyle = "grey"; // Colore rosso
+            ctx.lineWidth = 1; // Spessore 2 pixel
+
+            let currentX = 0;
+
+            for (let i = 0; i < width/divX; i++){
+                    // Inizia il percorso
+                    ctx.beginPath();
+                    // Muovi il contesto all'inizio della linea
+                    ctx.moveTo(currentX, height);
+
+                    // Disegna una linea fino alla posizione finale
+                    ctx.lineTo(currentX, 0);
+
+                    // Traccia la linea
+                    ctx.stroke();
+
+                            // Termina il percorso
+                    ctx.closePath();
+
+                    currentX += divX;
+            }
+
+            let currentY = 0;
+            for (let i = 0; i < width/divX; i++){
+                    // Inizia il percorso
+                    ctx.beginPath();
+                    // Muovi il contesto all'inizio della linea
+                    ctx.moveTo(0, currentY);
+
+                    // Disegna una linea fino alla posizione finale
+                    ctx.lineTo(width, currentY);
+
+                    // Traccia la linea
+                    ctx.stroke();
+
+                    // Termina il percorso
+                     ctx.closePath();
+
+                     currentY += divY;
+            }
+        }
+
+        function makeTrajectories(M, N, lambda){
+            const data = [];
+            for (let i = 0; i < M; i++) {
+                const serverAttacks = [];
+                let attackCount = 0;
+                for (let j = 0; j < N; j++) {
+                    if (Math.random() < lambda) {
+                        attackCount++;
+                    }
+                    serverAttacks.push(attackCount);
+                }
+                data.push(serverAttacks);
+            }
+
+            return data;
+        }
+
+        function generateChart(M, N, T, lambda) {
+            // Parametri
+            const canvas = document.getElementById('attackChart');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1500;
+            canvas.height = 400;
+            let offset = -50;
+
+            generateGrid(ctx, canvas.width, canvas.height, 20, 20);
+            // Prepara i dati delle traiettorie degli attacchi
+            const data = makeTrajectories(M, N, lambda);
+
+            // Disegna il grafico a linee
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const colors = generateRandomColors(M);
+            for (let i = 0; i < M; i++) {
+                const serverAttacks = data[i];
+
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                for (let j = 0; j < N; j++) {
+                    const x = (j * canvas.width) / (N - 1);
+                    const y = (canvas.height - (serverAttacks[j] / N) * canvas.height) + offset;
+                    console.log(y);
+                    ctx.lineTo(x, y);
+                    ctx.moveTo(x, y);
+                    ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                ctx.strokeStyle = colors[i];
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function generateRandomColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const color = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
+                colors.push(color);
+            }
+            return colors;
+        }
+
+
+        function generateHistogram(M, N, lambda) {
+  const canvas = document.getElementById('attackChart');
+  const ctx = canvas.getContext('2d');
+  const data = makeTrajectories(M, N, lambda);
+  const colors = generateRandomColors(N); // Colore per ogni colonna dell'istogramma
+  const barWidth = canvas.width / N;
+
+  // Calcola le frequenze degli attacchi in ciascuna delle N suddivisioni
+  const attackFrequencies = new Array(N).fill(0);
+  for (let i = 0; i < M; i++) {
+    const serverAttacks = data[i];
+    for (let j = 0; j < N; j++) {
+      attackFrequencies[j] += serverAttacks[j];
+    }
+  }
+
+  // Trova la massima frequenza per scalare l'istogramma
+  const maxFrequency = Math.max(...attackFrequencies);
+
+  // Disegna l'istogramma
+  for (let i = 0; i < N; i++) {
+    const barHeight = (attackFrequencies[i] / maxFrequency) * (canvas.height - 20);
+    const x = i * barWidth;
+    const y = canvas.height - barHeight;
+    ctx.fillStyle = colors[i];
+    //ctx.fillRect(x, y, barWidth, barHeight);
+    ctx.fillRect(canvas.width-100, canvas.height/2 + y,  Math.random() * 100 + 1, 5);
+  }
+}
+// Funzione per aggiornare il grafico quando gli input cambiano
+function updateChartOnChange() {
+  const numServersInput = document.getElementById('numServers');
+  const numIntervalsInput = document.getElementById('numIntervals');
+  const periodInput = document.getElementById('period');
+  const lambdaInput = document.getElementById('lambda');
+
+  numServersInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  numIntervalsInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  periodInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+
+  lambdaInput.addEventListener('input', () => {
+    generateChart();
+    generateHistogram();
+  });
+}
+
+// Chiamare la funzione updateChartOnChange() quando la pagina Ã¨ pronta
+window.onload = function () {
+  updateChartOnChange();
+  generateChart(); // Inizializza il grafico all'avvio
+  generateHistogram(); // Inizializza l'istogramma all'avvio
+};
+
+
+document.getElementById('generateChart').addEventListener('click', () => {
+    const numServers = parseInt(document.getElementById('numServers').value, 10);
+    const numIntervals = parseInt(document.getElementById('numIntervals').value, 10);
+    const period = parseInt(document.getElementById('period').value, 10);
+    const lambda = parseFloat(document.getElementById('lambda').value);
+
+    generateChart(numServers, numIntervals, period, lambda);
+    generateHistogram(numServers, numIntervals, lambda);
+    showProbabilityMessage(lambda, period, numIntervals);
+});
+</pre></code>
+<br>
+<br>
+
+<span class="bold-text" style="font-size: 24px;">C#:</span>
+<pre><code class="language-C#">
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Linq;
+
+class PoissonPointProcessSimulation : Form
+{
+    private const int Width = 800;
+    private const int Height = 400;
+    private const int BarWidth = 20;
+    private int numServers = 50;
+    private int numIntervals = 100;
+    private int period = 1;
+    private double lambda = 0.1;
+
+    public PoissonPointProcessSimulation()
+    {
+        DoubleBuffered = true;
+        Size = new Size(Width, Height);
+        GenerateChart();
+        GenerateHistogram();
+        Paint += (sender, e) =>
+        {
+            GenerateChart();
+            GenerateHistogram();
+        };
+        TextBox numServersTextBox = new TextBox() { Left = 100, Top = Height + 20 };
+        TextBox numIntervalsTextBox = new TextBox() { Left = 250, Top = Height + 20 };
+        TextBox periodTextBox = new TextBox() { Left = 400, Top = Height + 20 };
+        TextBox lambdaTextBox = new TextBox() { Left = 550, Top = Height + 20 };
+        Button generateButton = new Button() { Text = "Generate", Left = 700, Top = Height + 20 };
+        numServersTextBox.TextChanged += (sender, e) => int.TryParse(numServersTextBox.Text, out numServers);
+        numIntervalsTextBox.TextChanged += (sender, e) => int.TryParse(numIntervalsTextBox.Text, out numIntervals);
+        periodTextBox.TextChanged += (sender, e) => int.TryParse(periodTextBox.Text, out period);
+        lambdaTextBox.TextChanged += (sender, e) => double.TryParse(lambdaTextBox.Text, out lambda);
+        generateButton.Click += (sender, e) =>
+        {
+            GenerateChart();
+            GenerateHistogram();
+            Invalidate();
+        };
+        Controls.Add(numServersTextBox);
+        Controls.Add(numIntervalsTextBox);
+        Controls.Add(periodTextBox);
+        Controls.Add(lambdaTextBox);
+        Controls.Add(generateButton);
+    }
+
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        base.OnPaint(e);
+        GenerateChart();
+        GenerateHistogram();
+    }
+
+    private void GenerateChart()
+    {
+        using (var bmp = new Bitmap(Width, Height))
+        using (var g = Graphics.FromImage(bmp))
+        {
+            g.Clear(Color.White);
+            var data = MakeTrajectories(numServers, numIntervals, lambda);
+            var colors = GenerateRandomColors(numServers);
+            var offset = 0;
+            for (var i = 0; i < numServers; i++)
+            {
+                var serverAttacks = data[i];
+                var prevX = 0;
+                var prevY = Height;
+                for (var j = 0; j < numIntervals; j++)
+                {
+                    var x = j * Width / (numIntervals - 1);
+                    var y = Height - (int)((double)serverAttacks[j] / numIntervals * Height) + offset;
+                    g.DrawLine(new Pen(colors[i], 2), prevX, prevY, x, y);
+                    g.FillEllipse(new SolidBrush(colors[i]), x - 2, y - 2, 4, 4);
+                    prevX = x;
+                    prevY = y;
+                }
+                offset += 20;
+            }
+            using (var formGraphics = CreateGraphics())
+            {
+                formGraphics.DrawImage(bmp, 0, 0);
+            }
+        }
+    }
+
+    private void GenerateHistogram()
+    {
+        using (var bmp = new Bitmap(Width, Height))
+        using (var g = Graphics.FromImage(bmp))
+        {
+            g.Clear(Color.White);
+            var data = MakeTrajectories(numServers, numIntervals, lambda);
+            var colors = GenerateRandomColors(numIntervals);
+            var attackFrequencies = new int[numIntervals];
+            for (var i = 0; i < numServers; i++)
+            {
+                var serverAttacks = data[i];
+                for (var j = 0; j < numIntervals; j++)
+                {
+                    attackFrequencies[j] += serverAttacks[j];
+                }
+            }
+            var maxFrequency = attackFrequencies.Max();
+            for (var i = 0; i < numIntervals; i++)
+            {
+                var barHeight = (double)attackFrequencies[i] / maxFrequency * (Height - 20);
+                var x = i * BarWidth;
+                var y = Height - (int)barHeight;
+                g.FillRectangle(new SolidBrush(colors[i]), x, y, BarWidth, (int)barHeight);
+            }
+            using (var formGraphics = CreateGraphics())
+            {
+                formGraphics.DrawImage(bmp, 0, 0);
+            }
+        }
+    }
+
+    private int[][] MakeTrajectories(int M, int N, double lambda)
+    {
+        var data = new int[M][];
+        var random = new Random();
+        for (var i = 0; i < M; i++)
+        {
+            var serverAttacks = new int[N];
+            var attackCount = 0;
+            for (var j = 0; j < N; j++)
+            {
+                if (random.NextDouble() < lambda)
+                {
+                    attackCount++;
+                }
+                serverAttacks[j] = attackCount;
+            }
+            data[i] = serverAttacks;
+        }
+        return data;
+    }
+
+    private Color[] GenerateRandomColors(int count)
+    {
+        var random = new Random();
+        var colors = new Color[count];
+        for (var i = 0; i < count; i++)
+        {
+            colors[i] = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+        }
+        return colors;
+    }
+
+    [STAThread]
+    public static void Main()
+    {
+        Application.Run(new PoissonPointProcessSimulation());
+    }
+}
+</pre></code>
+
+<label style="font-size: 24px; font-weight: bold;">Poisson point process</label>
+<label> A Poisson point process is a mathematical model used to describe the random distribution of points or events in time or space. <br>
+It is named after the French mathematician Siméon Denis Poisson. In a Poisson point process, the number of events that occur in a given interval of time or space follows a Poisson distribution, 
+and these events are independent of each other. <br>
+In my exercise, I'm simulating attacks on M servers over a period of time T, where the occurrence of attacks in subintervals follows a Poisson distribution. <br>
+The Poisson point process analogy in this exercise could be seen in the random occurrence of attacks in subintervals, which is akin to the random distribution of events in time or space in a Poisson point process. <br> <br>
+As for verifying whether this distributions come close to the theoretical asymptotic distribution for large N and M, I would typically compare the results of this simulation with the expected distribution
+based on the Poisson distribution parameters. In this case, I'd compare the simulated distribution of the number of attacks at the end of the period with the theoretical Poisson distribution
+for the same parameters. <br>
+To perform this verification, I would need to calculate the Poisson distribution for the given values of λ and T/N and compare it to the results of your simulations as N and M become sufficiently large. 
+If this simulations closely match the Poisson distribution, it would provide evidence that the behavior of the attacks resembles a Poisson point process. </label>
+
