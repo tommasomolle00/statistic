@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Homework 6</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        ol{
+          font-size:20px;
+        }
+    </style>
+</head>
+  
+<body>
+    <h1>Homework 6</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+        <ol>
+            <li>
+                <label for="question1">
+                    <span> 
+                      <strong> Exercise 1</strong>
+                      <br>
+                      Consider a scheme similar to Homework 3, Part a
+                      where M systems are subject to a series of N attacks. A system is discarded as "unsecure" if it reaches a penetration score of P before reaching, instead,
+                      a security score of S. Simulate and represent the probabilities of a system being discarded, for various values of P, example: P = k*10 (k=2,...,10), 
+                      conditional on the 3 cases for S: S = 20, S = 60, S = 100 (or any other value of S of your choice that you find useful to explore (it could be a user parameter).
+                     </span>
+
+                    <br>
+                    <br>
+                </label>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simulazione di Score di Sicurezza</title>
+</head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+canvas {
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Imposta la larghezza desiderata */
+    max-width: 1000px; /* Imposta una larghezza massima, se necessario */
+    height: auto; /* Imposta l'altezza automaticamente in base alla larghezza */
+}
+
+  p {
+    margin-top: 20px;
+  }
+</style>
+
+
+<body>
+  <h1>Simulazione di Score di Sicurezza</h1>
+
+  <label for="M">Numero di attacchi (M):</label>
+  <input type="number" id="M" value="5"><br>
+
+  <label for="N">Numero di sistemi (N):</label>
+  <input type="number" id="N" value="10"><br>
+
+  <label for="securityScore">Security Score :</label>
+  <input type="number" id="securityScore" value="5"><br>
+
+  
+  <label for="scarto">Scarto:</label>
+  <input type="number" id="scarto" value="-50"><br>
+
+  <p id="probabilitaP"></p>
+
+  <button onclick="simulateAndDisplay()">Simula</button>
+
+  <canvas id="graph" width="1700" height="1000"></canvas>
+
+  <script>
+    function sistemiScartati(traiettorie, attacchi, sistemi, limitePenetrazioni, securityScore) {
+      let sistemiScartati = [];
+      let boh = true;
+
+      for (let i = 0; i < sistemi; i++) {
+        for (let j = 0; j < attacchi; j++) {
+              //console.log(i,j);
+              if(traiettorie[i][j] <= limitePenetrazioni){
+                sistemiScartati.push(-1);
+                boh = false;
+                break;
+              }
+              if(traiettorie[i][j] >= securityScore){
+                sistemiScartati.push(1);
+                boh = false;
+                break;
+              }
+
+        }
+          if(boh){
+            sistemiScartati.push(0);
+          }
+          else boh = true;
+
+      }
+
+      return sistemiScartati;
+    
+  }
+
+    function generateGrid(ctx, width, height, M, N, divX, divY) {
+      ctx.strokeStyle = "grey";
+      ctx.lineWidth = 1;
+
+      if (M > 20) {
+        unit = width / M;
+        divX = width / 20;
+      } else {
+        divX = width / M;
+        unit = divX;
+      }
+
+      for (let i = 0; i <= width; i += divX) {
+        ctx.beginPath();
+        ctx.moveTo(i, height);
+        ctx.lineTo(i, 0);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillText(Math.round(i / unit).toString(), i, height - 4); // Label X-axis
+      }
+
+      for (let i = 0; i <= height; i += height / divY) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillText(parseInt((height / 2 - i) / divY).toString(), 5, i); // Label Y-axis
+      }
+    }
+
+    function makeTrajectories(attacchi, sistemi, p) {
+      const data = new Array(sistemi).fill().map(() => new Array(attacchi).fill(0));
+
+      for (let i = 0; i < sistemi; i++) {
+        for (let j = 1; j < attacchi; j++) {
+          if (Math.random() < p) {
+            data[i][j] = data[i][j - 1] - 1; // System is penetrated
+          } else {
+            data[i][j] = data[i][j - 1] + 1; // System is successfully shielded
+          }
+        }
+      }
+
+      return data;
+    }
+
+    function getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function trovaValoreMassimo(matrice) {
+      let massimo = Number.NEGATIVE_INFINITY;
+
+      for (let riga = 0; riga < matrice.length; riga++) {
+        for (let colonna = 0; colonna < matrice[riga].length; colonna++) {
+          if (Math.abs(matrice[riga][colonna]) > massimo) {
+            massimo = Math.abs(matrice[riga][colonna]);
+          }
+        }
+      }
+
+      return massimo;
+    }
+
+
+    function contaMenoUno(array) {
+      // Utilizza filter per ottenere un nuovo array contenente solo gli elementi che sono -1
+      const menoUnoArray = array.filter(elemento => elemento === -1);
+      
+      // Restituisci la lunghezza dell'array contenente solo -1
+      return menoUnoArray.length;
+    }
+
+
+
+
+    function simulateAndDisplay() {
+      const attacchi = parseInt(document.getElementById("M").value);
+      const sistemi = parseInt(document.getElementById("N").value);
+      const securityScore = parseInt(document.getElementById("securityScore").value);
+      const scarto = parseInt(document.getElementById("scarto").value);
+      var divX = 20;
+      var divY = 20;
+      
+
+      const p = 0.5;
+      document.getElementById("probabilitaP").innerText = "Probabilità P fissata:" + p;
+
+      const canvas = document.getElementById("graph");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      generateGrid(ctx, canvas.width, canvas.height, attacchi, sistemi, divX, divY);
+
+      let discardedSystems = 0;
+
+      // Dichiarazione di trajectory
+      const trajectory = makeTrajectories(attacchi, sistemi, p);
+
+      const scartati = sistemiScartati(trajectory, attacchi, sistemi, scarto, securityScore);
+
+      if (attacchi > 20) {
+        unit = canvas.width / attacchi;
+        divX = canvas.width / 20;
+      } else {
+        divX = canvas.width / attacchi;
+        unit = divX;
+      }
+
+      // Muovi questa riga qui
+      max = trovaValoreMassimo(trajectory);
+
+      if (max > 10) {
+        unitY = canvas.height / 2 / max;
+        divY = canvas.height / 2 / 20;
+      } else {
+        divY = canvas.height / 2 / max;
+        unitY = divY;
+      }
+
+      ctx.strokeStyle = 'green';
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2 - (securityScore * unitY));
+      ctx.lineTo(canvas.width, canvas.height / 2 - (securityScore * unitY));
+      ctx.stroke();
+      ctx.closePath();
+
+      ctx.strokeStyle = 'red';
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2 - (scarto * unitY));
+      ctx.lineTo(canvas.width, canvas.height / 2 - (scarto * unitY));
+      ctx.stroke();
+      ctx.closePath();
+
+      console.log(trajectory);
+      console.log(scartati);
+      
+      // Simulate and display trajectories
+      for (let sist = 0; sist < sistemi; sist++) {
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.beginPath();
+        ctx.strokeStyle = getRandomColor();
+        ctx.lineWidth = 2;
+
+        let systemDiscarded = false; // Aggiungi questa variabile per tener traccia se il sistema è stato scartato
+
+        for (let x = 0; x < attacchi; x++) {
+          y = trajectory[sist][x] * unitY;
+          ctx.lineTo(x * unit, canvas.height / 2 - y);
+
+
+        }
+
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      console.log("Numero di sistemi scartati:", contaMenoUno(scartati));
+  document.getElementById("probabilitaP").innerText += " - Sistemi scartati: " + contaMenoUno(scartati);
+      
+    }
+  
+  </script>
+
+<span class="bold-text" style="font-size: 24px;">Javascript:</span>
+<pre><code class="language-javascript">
+    function sistemiScartati(traiettorie, attacchi, sistemi, limitePenetrazioni, securityScore) {
+      let sistemiScartati = [];
+      let boh = true;
+
+      for (let i = 0; i < sistemi; i++) {
+        for (let j = 0; j < attacchi; j++) {
+              //console.log(i,j);
+              if(traiettorie[i][j] <= limitePenetrazioni){
+                sistemiScartati.push(-1);
+                boh = false;
+                break;
+              }
+              if(traiettorie[i][j] >= securityScore){
+                sistemiScartati.push(1);
+                boh = false;
+                break;
+              }
+        }
+          if(boh){
+            sistemiScartati.push(0);
+          }
+          else boh = true;
+      }
+      return sistemiScartati;
+  }
+    function generateGrid(ctx, width, height, M, N, divX, divY) {
+      ctx.strokeStyle = "grey";
+      ctx.lineWidth = 1;
+
+      if (M > 20) {
+        unit = width / M;
+        divX = width / 20;
+      } else {
+        divX = width / M;
+        unit = divX;
+      }
+
+      for (let i = 0; i <= width; i += divX) {
+        ctx.beginPath();
+        ctx.moveTo(i, height);
+        ctx.lineTo(i, 0);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillText(Math.round(i / unit).toString(), i, height - 4); // Label X-axis
+      }
+
+      for (let i = 0; i <= height; i += height / divY) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillText(parseInt((height / 2 - i) / divY).toString(), 5, i); // Label Y-axis
+      }
+    }
+
+    function makeTrajectories(attacchi, sistemi, p) {
+      const data = new Array(sistemi).fill().map(() => new Array(attacchi).fill(0));
+
+      for (let i = 0; i < sistemi; i++) {
+        for (let j = 1; j < attacchi; j++) {
+          if (Math.random() < p) {
+            data[i][j] = data[i][j - 1] - 1; // System is penetrated
+          } else {
+            data[i][j] = data[i][j - 1] + 1; // System is successfully shielded
+          }
+        }
+      }
+      return data;
+    }
+
+    function getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function trovaValoreMassimo(matrice) {
+      let massimo = Number.NEGATIVE_INFINITY;
+
+      for (let riga = 0; riga < matrice.length; riga++) {
+        for (let colonna = 0; colonna < matrice[riga].length; colonna++) {
+          if (Math.abs(matrice[riga][colonna]) > massimo) {
+            massimo = Math.abs(matrice[riga][colonna]);
+          }
+        }
+      }
+      return massimo;
+    }
+
+
+    function contaMenoUno(array) {
+      // Utilizza filter per ottenere un nuovo array contenente solo gli elementi che sono -1
+      const menoUnoArray = array.filter(elemento => elemento === -1);
+      
+      // Restituisci la lunghezza dell'array contenente solo -1
+      return menoUnoArray.length;
+    }
+    function simulateAndDisplay() {
+      const attacchi = parseInt(document.getElementById("M").value);
+      const sistemi = parseInt(document.getElementById("N").value);
+      const securityScore = parseInt(document.getElementById("securityScore").value);
+      const scarto = parseInt(document.getElementById("scarto").value);
+      var divX = 20;
+      var divY = 20;
+      const p = 0.5;
+      document.getElementById("probabilitaP").innerText = "Probabilità P fissata:" + p;
+      const canvas = document.getElementById("graph");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      generateGrid(ctx, canvas.width, canvas.height, attacchi, sistemi, divX, divY);
+      let discardedSystems = 0;
+
+      // Dichiarazione di trajectory
+      const trajectory = makeTrajectories(attacchi, sistemi, p);
+
+      const scartati = sistemiScartati(trajectory, attacchi, sistemi, scarto, securityScore);
+
+      if (attacchi > 20) {
+        unit = canvas.width / attacchi;
+        divX = canvas.width / 20;
+      } else {
+        divX = canvas.width / attacchi;
+        unit = divX;
+      }
+
+      // Muovi questa riga qui
+      max = trovaValoreMassimo(trajectory);
+
+      if (max > 10) {
+        unitY = canvas.height / 2 / max;
+        divY = canvas.height / 2 / 20;
+      } else {
+        divY = canvas.height / 2 / max;
+        unitY = divY;
+      }
+      ctx.strokeStyle = 'green';
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2 - (securityScore * unitY));
+      ctx.lineTo(canvas.width, canvas.height / 2 - (securityScore * unitY));
+      ctx.stroke();
+      ctx.closePath();
+      ctx.strokeStyle = 'red';
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2 - (scarto * unitY));
+      ctx.lineTo(canvas.width, canvas.height / 2 - (scarto * unitY));
+      ctx.stroke();
+      ctx.closePath();
+
+      console.log(trajectory);
+      console.log(scartati);
+      
+      // Simulate and display trajectories
+      for (let sist = 0; sist < sistemi; sist++) {
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.beginPath();
+        ctx.strokeStyle = getRandomColor();
+        ctx.lineWidth = 2;
+
+        let systemDiscarded = false; // Aggiungi questa variabile per tener traccia se il sistema è stato scartato
+
+        for (let x = 0; x < attacchi; x++) {
+          y = trajectory[sist][x] * unitY;
+          ctx.lineTo(x * unit, canvas.height / 2 - y);
+        }
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      console.log("Numero di sistemi scartati:", contaMenoUno(scartati));
+  document.getElementById("probabilitaP").innerText += " - Sistemi scartati: " + contaMenoUno(scartati);
+    }
+    </pre> </code>
+  
+  <br>
+  <span class="bold-text" style="font-size: 24px;">C#:</span>
+<pre><code class="language-C#">
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+
+class Program
+{
+    static List<int[]> MakeTrajectories(int attacchi, int sistemi, double p)
+    {
+        List<int[]> data = new List<int[]>(sistemi);
+        Random rand = new Random();
+
+        for (int i = 0; i < sistemi; i++)
+        {
+            data.Add(new int[attacchi]);
+            for (int j = 1; j < attacchi; j++)
+            {
+                if (rand.NextDouble() < p)
+                {
+                    data[i][j] = data[i][j - 1] - 1; // System is penetrated
+                }
+                else
+                {
+                    data[i][j] = data[i][j - 1] + 1; // System is successfully shielded
+                }
+            }
+        }
+        return data;
+    }
+
+    static List<int> SistemiScartati(List<int[]> traiettorie, int attacchi, int sistemi, int limitePenetrazioni, int securityScore)
+    {
+        List<int> sistemiScartati = new List<int>();
+        bool boh = true;
+
+        for (int i = 0; i < sistemi; i++)
+        {
+            for (int j = 0; j < attacchi; j++)
+            {
+                if (traiettorie[i][j] <= limitePenetrazioni)
+                {
+                    sistemiScartati.Add(-1);
+                    boh = false;
+                    break;
+                }
+                if (traiettorie[i][j] >= securityScore)
+                {
+                    sistemiScartati.Add(1);
+                    boh = false;
+                    break;
+                }
+            }
+            if (boh)
+            {
+                sistemiScartati.Add(0);
+            }
+            else
+            {
+                boh = true;
+            }
+        }
+        return sistemiScartati;
+    }
+
+    static void GenerateGrid(Graphics ctx, int width, int height, int M, int N, int divX, int divY)
+    {
+        Pen pen = new Pen(Color.Gray, 1);
+
+        int unit;
+        if (M > 20)
+        {
+            unit = width / M;
+            divX = width / 20;
+        }
+        else
+        {
+            divX = width / M;
+            unit = divX;
+        }
+
+        for (int i = 0; i <= width; i += divX)
+        {
+            ctx.DrawLine(pen, i, height, i, 0);
+            ctx.DrawString(Math.Round(i / (double)unit).ToString(), new Font("Arial", 8), Brushes.Black, i, height - 4); // Label X-axis
+        }
+
+        for (int i = 0; i <= height; i += height / divY)
+        {
+            ctx.DrawLine(pen, 0, i, width, i);
+            ctx.DrawString(((height / 2 - i) / (double)divY).ToString(), new Font("Arial", 8), Brushes.Black, 5, i); // Label Y-axis
+        }
+    }
+
+    static Color GetRandomColor()
+    {
+        Random rand = new Random();
+        return Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
+    }
+
+    static int TrovaValoreMassimo(List<int[]> matrice)
+    {
+        int massimo = int.MinValue;
+
+        foreach (var riga in matrice)
+        {
+            foreach (var elemento in riga)
+            {
+                if (Math.Abs(elemento) > massimo)
+                {
+                    massimo = Math.Abs(elemento);
+                }
+            }
+        }
+        return massimo;
+    }
+
+    static int ContaMenoUno(List<int> array)
+    {
+        return array.Count(elemento => elemento == -1);
+    }
+
+    static void SimulateAndDisplay(Graphics ctx, int attacchi, int sistemi, int securityScore, int scarto, int divX, int divY)
+    {
+        double p = 0.5;
+        Console.WriteLine("Probabilità P fissata: " + p);
+
+        ctx.Clear(Color.White);
+        GenerateGrid(ctx, ctx.VisibleClipBounds.Width, ctx.VisibleClipBounds.Height, attacchi, sistemi, divX, divY);
+
+        List<int[]> trajectory = MakeTrajectories(attacchi, sistemi, p);
+        List<int> scartati = SistemiScartati(trajectory, attacchi, sistemi, scarto, securityScore);
+
+        int unit;
+        int unitY;
+        int max = TrovaValoreMassimo(trajectory);
+
+        if (attacchi > 20)
+        {
+            unit = (int)(ctx.VisibleClipBounds.Width / (double)attacchi);
+            divX = (int)(ctx.VisibleClipBounds.Width / 20.0);
+        }
+        else
+        {
+            divX = (int)(ctx.VisibleClipBounds.Width / (double)attacchi);
+            unit = divX;
+        }
+
+        if (max > 10)
+        {
+            unitY = (int)(ctx.VisibleClipBounds.Height / 2.0 / max);
+            divY = (int)(ctx.VisibleClipBounds.Height / 2.0 / 20.0);
+        }
+        else
+        {
+            divY = (int)(ctx.VisibleClipBounds.Height / 2.0 / max);
+            unitY = divY;
+        }
+
+        Pen greenPen = new Pen(Color.Green, 2);
+        Pen redPen = new Pen(Color.Red, 2);
+
+        ctx.DrawLine(greenPen, 0, ctx.VisibleClipBounds.Height / 2 - (securityScore * unitY), ctx.VisibleClipBounds.Width, ctx.VisibleClipBounds.Height / 2 - (securityScore * unitY));
+        ctx.DrawLine(redPen, 0, ctx.VisibleClipBounds.Height / 2 - (scarto * unitY), ctx.VisibleClipBounds.Width, ctx.VisibleClipBounds.Height / 2 - (scarto * unitY));
+
+        for (int sist = 0; sist < sistemi; sist++)
+        {
+            ctx.DrawLine(new Pen(GetRandomColor(), 2), 0, ctx.VisibleClipBounds.Height / 2, 0, ctx.VisibleClipBounds.Height / 2);
+            bool systemDiscarded = false;
+
+            for (int x = 0; x < attacchi; x++)
+            {
+                int y = trajectory[sist][x] * unitY;
+                ctx.DrawLine(new Pen(GetRandomColor(), 2), x * unit, ctx.VisibleClipBounds.Height / 2 - y, (x + 1) * unit, ctx.VisibleClipBounds.Height / 2 - y);
+            }
+        }
+
+        Console.WriteLine("Numero di sistemi scartati: " + ContaMenoUno(scartati));
+    }
+
+    static void Main()
+    {
+        int attacchi = 100;
+        int sistemi = 50;
+        int securityScore = 60;
+        int scarto = 30;
+        int divX = 20;
+        int divY = 20;
+
+        using (Bitmap bitmap = new Bitmap(
+    
+               </pre> </code>
+    <span>
+      <strong>Research</strong>
+      <br>
+      Find out on the web about the "Gambler's Ruin Problem". See if you can see any analogy with this exercise and make your personal consideration about what your simulation 
+      is suggesting to you.
+      <br>
+      <br>
+      The Gambler's Ruin Problem is a classical probability problem that models a situation involving a gambler who starts with a certain amount of money and repeatedly places bets. 
+      The objective is to understand the probability of the gambler going broke or reaching a certain goal before running out of money.
+      In its basic form, the problem can be described as follows: 
+      <br>
+      <br>
+      A gambler starts with a certain amount of money, and in each round, they have a probability p of winning and q = 1-p of losing. 
+      The gambler continues to play until they either reach a specified goal (e.g., doubling their initial money) or go broke (reach zero).
+      The problem has interesting implications and applications in various fields, including probability theory and finance. 
+      <br>
+      <br>
+      The analogy with the provided JavaScript code lies in the concept of systems being "discarded" based on certain conditions. In the Gambler's Ruin Problem, a gambler's "ruin" corresponds to going broke,
+      and the probability of reaching this ruin can be analyzed.
+      When considering the simulation in the provided code, it's possible to draw parallels between the trajectory of a system under attack and the gambler's progression in the game. 
+      The conditions for discarding a system in the simulation (e.g., reaching a penetration score or a security score) can be compared to the conditions for the gambler's ruin.
+      Analyzing the probabilities of discarding systems in various scenarios is akin to analyzing the probabilities of the gambler going broke or reaching a goal in the classic Gambler's Ruin Problem.
+      <br>
+      <br>
+      In summary, the Gambler's Ruin Problem provides a theoretical framework for understanding the probabilities associated with repeated events and can offer insights into scenarios where outcomes 
+      are influenced by random events, such as in the simulation of system vulnerabilities in the provided code.
+    </span>
+</body>
+</html>
