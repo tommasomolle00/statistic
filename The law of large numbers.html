@@ -8,12 +8,11 @@
   Prism.highlightAll();
 </script>
 
-
 <head>
     <meta http-equiv='cache-control' content='no-cache'> 
     <meta http-equiv='expires' content='0'> 
     <meta http-equiv='pragma' content='no-cache'>
-    <title>Homework 5</title>
+    <title>The law of large numbers</title>
     <style>
         h1 {
             text-align: center;
@@ -26,6 +25,7 @@
             color: blue;
             text-decoration: none;
         }
+        
         label {
             font-size: 20px;
         }
@@ -35,41 +35,83 @@
         p{
           font-size:20px;
         }
-        ol{
-          font-size:20px;
-        }
+        
     </style>
 </head>
   
 <body>
-    <h1>Homework 5</h1>
+    <h1>The law of large numbers</h1>
     <a href="index.html">Home</a>
 <ul>
     <form>
-        <ol>
-            <li>
-                <label for="question1">
-                    <span class="bold-text"> 
-                      
-                    M servers are subject to attacks during a period of time T (for instance 1 year).
-                    Subdivide the interval T in N subinterval of size T/N and in each of this suppose that an attack can occur with probability λ T/N.
-                    Simulate the attacks to the M servers and represent each of them with a line which
-                    makes jumps of 1 at each attack event.
-                    <br>
-                    <br>
-                    Using the same objects ("movable/resizable rectangle", histogram, etc.) of the previous homework 3
-                    draw vertically on the line chart the 2 histograms representing the distribution of the number
-                    of attacks at the end of the period and one internal istant for comparison.
-                    Study what happens asymptotically, for N large, and a number of systems M a sufficient to give shape to
-                    a simulated distribution. Make some personal considerations about the shape and the average of the distributions that you see.
-                    <br>
-                    <br>
-                    Find out on the web about a Poisson point process. See if you can see any analogy with this Exercise and verify whether your distributions come close (for N, M sufficiently large)
-                    to the theoretical asymptotic distribution. </span>
+          <label>
+                The Law of Large Numbers (LLN) is a fundamental concept in probability and statistics that describes the result of performing the same experiment a large number of times.<br>
+                According to the law, the average of the results obtained from a large number of independent identical trials should be close to the expected value and tends to become closer to the
+                expected value as more trials are performed².<br>
+                There are two forms of the law:<br> the Weak Law of Large Numbers (WLLN) and the Strong Law of Large Numbers (SLLN). <br>
+                The WLLN states that the sample mean converges in probability to the expected value, while the SLLN states that the sample mean converges almost surely to the expected value¹.<br><br>
 
+Here's a simplified proof of the WLLN using Chebyshev's inequality:<br>
+Let's consider a sequence of random variables with the same expected value. The sample mean of the first `n` terms of the sequence is denoted by `Xn`. <br>
+The WLLN states that as `n` approaches infinity, the probability that `Xn` deviates from the expected value by more than a small positive amount `ε` goes to zero. <br>
+This can be formally written as: <br><br>
+
+`P(|Xn - μ| ≥ ε) → 0 as n → ∞`
+<br><br>
+where `μ` is the expected value. <br>
+
+Using Chebyshev's inequality, we have: <br><br>
+
+`P(|Xn - μ| ≥ ε) ≤ Var(Xn) / ε²`
+<br><br>
+If the variance of `Xn` goes to zero as `n` approaches infinity, then the right-hand side of the above inequality goes to zero, which implies the WLLN¹.<br><br>
+
+As for the simulation, one of the simplest ways to illustrate the LLN is with coin flipping experiments. <br>
+If a fair coin (one with a probability of heads equal to 1/2) is flipped a large number of times, the proportion of heads will tend to get closer to 1/2 as the number of tosses increases⁶. <br>
+This concept can be extended to more complex events and is the key idea behind why we can use simulation to predict the outcomes of complex events⁷.<br><br>
+
+To illustrate the Law of Large Numbers, let’s consider a simple simulation where someone randomly chooses a number 1, 99, or 101. <br>
+The expected average can be calculated mathematically as (1 + 99 + 101) / 3 = 67. The law of large numbers tells us that the average of our simulations will tend closer to 67 the longer we run our simulation.
+<br><br>
+
+<span class="bold-text" style="font-size: 24px;">Python:</span>
+<pre><code class="language-python">
+import random
+random.seed(7)
+
+def coin_flip():
+    # This function simulates a coin flip: "H" for heads and "T" for tails.
+    return "H" if random.random() < 0.5 else "T"
+
+def simulate_flips(n):
+    # This function simulates 'n' coin flips and returns the proportion of heads.
+    heads = sum(1 for _ in range(n) if coin_flip() == "H")
+    return heads / n
+
+# Simulate coin flips for different numbers of flips:
+for num_flips in [10, 100, 1000, 10000, 100000]:
+    proportion_heads = simulate_flips(num_flips)
+    print(f"After {num_flips} flips, the proportion of heads is: {proportion_heads:.4f}")
+
+</pre></code>
+
+When you run this code, you might get varying results for smaller numbers of flips (like 10 or 100). But as you increase the number of flips to larger values (like 10,000 or 100,000),
+you should notice that the proportion of heads gets closer and closer to 0.5 (which is the expected proportion since a fair coin has a 50% chance of landing heads)
+<br><br>
+(1) Law of large numbers - Wikipedia. https://en.wikipedia.org/wiki/Law_of_large_numbers.<br>
+(2) Law of Large Numbers | Strong and weak, with proofs and exercises. https://www.statlect.com/asymptotic-theory/law-of-large-numbers.<br>
+(3) Simulated Coin Tossing Experiments and the Law of Large Numbers. https://demonstrations.wolfram.com/SimulatedCoinTossingExperimentsAndTheLawOfLargeNumbers/.<br>
+(4) Law of Large Numbers - Data Science Discovery. https://discovery.cs.illinois.edu/learn/Simulation-and-Distributions/Law-of-Large-Numbers/.<br>
+(5) probability theory - proofing the strong law of large numbers .... https://math.stackexchange.com/questions/3068125/proofing-the-strong-law-of-large-numbers.<br>
+(6) Law of large numbers - Duke University. https://www2.stat.duke.edu/courses/Fall09/sta205/lec/lln.pdf.<br>
+(7) Law of Large Numbers - Statistics By Jim. https://statisticsbyjim.com/basics/law-of-large-numbers/.<br>
+(8) Interactive Applet – Law of Large Numbers - University of Florida. https://bolt.mph.ufl.edu/2013/01/07/interactive-applet-law-of-large-numbers/.<br>
+(9) undefined. http://demonstrations.wolfram.com/SimulatedCoinTossingExperimentsAndTheLawOfLargeNumbers/.<br>
+    
                     <br>
                     <br>
                 </label>
+                </b>
             </li>
         </ol>
     </form>
