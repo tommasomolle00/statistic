@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Algorithms for random variates generation</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        
+    </style>
+</head>
+  
+<body>
+    <h1>Algorithms for random variates generation</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+          <label>
+Random variate generation is the numerical practice of generating pseudo-random numbers that follow a given probability distribution¹. <br>
+The methods are typically based on the availability of a uniformly distributed pseudo-random number (PRN) generator¹. <br>
+Computational algorithms are then used to manipulate a single random variate, X, or often several such variates, into a new random variate Y such that these values have the required distribution¹.<br><br>
+
+There are several strategies or methods for producing random variates³:<br>
+1. Inverse transform or inverse cumulative distribution function (CDF) method: This method involves generating a uniformly distributed random number<br>
+and applying the inverse of the desired distribution's cumulative distribution function to it¹.<br>
+2. Convolution: This method describes the use of arithmetics on top of one or more existing sampling methods to generate more involved distributions¹.<br>
+3. Acceptance/Rejection: This is a generic method for generating independent samples for arbitrary density functions¹.<br>
+4. Mixture and Truncated Distributions: This method is used when the observed data is connected in a Markov chain and should be processed sequentially¹.<br><br>
+
+For discrete probability distributions with a finite number of indices at which the probability mass function takes non-zero values, the basic sampling algorithm is straightforward¹.<br>
+The interval [0, 1) is divided into n intervals, the width of interval i equals the probability f(i).<br>
+One draws a uniformly distributed pseudo-random number X, and searches for the index i of the corresponding interval¹.<br><br>
+
+For continuous distributions, there are several methods like Rejection sampling, Inverse transform sampling, Ratio of uniforms, Slice sampling, Ziggurat algorithm, and Convolution random number generator¹.<br><br>
+
+There are also libraries like UNU.RAN (Universal Non-Uniform RAndom Number generator) which is a collection of algorithms for generating non-uniform pseudorandom variates².
+<br><br>
+(1) Non-uniform random variate generation - Wikipedia. https://en.wikipedia.org/wiki/Non-uniform_random_variate_generation.<br>
+(2) A.2 Generating Random Variates from Distributions. https://rossetti.github.io/RossettiArenaBook/app-rnrv-rvs.html.<br>
+(3) UNU.RAN - Universal Non-Uniform RANdom number generators - WU. https://statmath.wu.ac.at/unuran/.<br>
+(4) Random Variate Generation - H. Milton Stewart School of Industrial and .... https://www2.isye.gatech.edu/~sman/courses/Mexico2010/Module07-RandomVariateGeneration.pdf.<br>
+(5) A simple algorithm for generating random variates with a log-concave .... https://link.springer.com/article/10.1007/BF02242271.<br>
+                    <br>
+                    <br>
+                </label>
+                </b>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
