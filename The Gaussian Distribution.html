@@ -12,7 +12,7 @@
     <meta http-equiv='cache-control' content='no-cache'> 
     <meta http-equiv='expires' content='0'> 
     <meta http-equiv='pragma' content='no-cache'>
-    <title>The Law of Large Numbers</title>
+    <title>The Gaussian Distribution</title>
     <style>
         h1 {
             text-align: center;
@@ -40,74 +40,43 @@
 </head>
   
 <body>
-    <h1>The Law of Large Numbers</h1>
+    <h1>The Gaussian Distribution</h1>
     <a href="index.html">Home</a>
 <ul>
     <form>
           <label>
-                The Law of Large Numbers (LLN) is a fundamental concept in probability and statistics that describes the result of performing the same experiment a large number of times.<br>
-                According to the law, the average of the results obtained from a large number of independent identical trials should be close to the expected value and tends to become closer to the
-                expected value as more trials are performed².<br>
-                There are two forms of the law:<br> the Weak Law of Large Numbers (WLLN) and the Strong Law of Large Numbers (SLLN). <br>
-                The WLLN states that the sample mean converges in probability to the expected value, while the SLLN states that the sample mean converges almost surely to the expected value¹.<br><br>
+The Gaussian distribution, also known as the normal distribution, is a type of continuous probability distribution for a real-valued random variable¹. <br>
+It is symmetric about the mean, showing that data near the mean are more frequent in occurrence than data far from the mean⁴. In graphical form, it appears as a "bell curve"².<br>
+The peak of the graph is always located at the mean, and the area under the curve is always exactly equal to 1¹¹.<br><br>
 
-Here's a simplified proof of the WLLN using Chebyshev's inequality:<br>
-Let's consider a sequence of random variables with the same expected value. The sample mean of the first `n` terms of the sequence is denoted by `Xn`. <br>
-The WLLN states that as `n` approaches infinity, the probability that `Xn` deviates from the expected value by more than a small positive amount `ε` goes to zero. <br>
-This can be formally written as: <br><br>
+The Gaussian distribution is defined by two parameters: the mean (μ) and the standard deviation (σ). The standard normal distribution has zero mean and unit standard deviation¹².<br>
 
-`P(|Xn - μ| ≥ ε) → 0 as n → ∞`
-<br><br>
-where `μ` is the expected value. <br>
-
-Using Chebyshev's inequality, we have: <br><br>
-
-`P(|Xn - μ| ≥ ε) ≤ Var(Xn) / ε²`
-<br><br>
-If the variance of `Xn` goes to zero as `n` approaches infinity, then the right-hand side of the above inequality goes to zero, which implies the WLLN¹.<br><br>
-
-As for the simulation, one of the simplest ways to illustrate the LLN is with coin flipping experiments. <br>
-If a fair coin (one with a probability of heads equal to 1/2) is flipped a large number of times, the proportion of heads will tend to get closer to 1/2 as the number of tosses increases⁶. <br>
-This concept can be extended to more complex events and is the key idea behind why we can use simulation to predict the outcomes of complex events⁷.<br><br>
-
-To illustrate the Law of Large Numbers, let’s consider a simple simulation where someone randomly chooses a number 1, 99, or 101. <br>
-The expected average can be calculated mathematically as (1 + 99 + 101) / 3 = 67. The law of large numbers tells us that the average of our simulations will tend closer to 67 the longer we run our simulation.
+Derivation:<br>
+The Gaussian distribution can be derived from the binomial probability mass function under specified conditions⁸. The famous de Moivre’s Laplace limit theorem proved this⁸. <br>
+However, this approach is cumbersome as it relies heavily on many lemmas and theorems⁸. <br>
+An alternative and less rigorous method of deriving the Gaussian distribution from basic random experiments has been proposed⁸.
 <br><br>
 
-<span class="bold-text" style="font-size: 24px;">Python:</span>
-<pre><code class="language-python">
-import random
-random.seed(7)
-
-def coin_flip():
-    # This function simulates a coin flip: "H" for heads and "T" for tails.
-    return "H" if random.random() < 0.5 else "T"
-
-def simulate_flips(n):
-    # This function simulates 'n' coin flips and returns the proportion of heads.
-    heads = sum(1 for _ in range(n) if coin_flip() == "H")
-    return heads / n
-
-# Simulate coin flips for different numbers of flips:
-for num_flips in [10, 100, 1000, 10000, 100000]:
-    proportion_heads = simulate_flips(num_flips)
-    print(f"After {num_flips} flips, the proportion of heads is: {proportion_heads:.4f}")
-
-</pre></code>
-
-When you run this code, you might get varying results for smaller numbers of flips (like 10 or 100). But as you increase the number of flips to larger values (like 10,000 or 100,000),
-you should notice that the proportion of heads gets closer and closer to 0.5 (which is the expected proportion since a fair coin has a 50% chance of landing heads)
+Simulation:<br>
+In terms of simulation, you can use software like MATLAB to work with the normal distribution interactively¹².<br>
+You can create a probability distribution object by fitting a probability distribution to sample data or by specifying parameter values. 
+Then, you can use object functions to evaluate the distribution, generate random numbers, and so on¹². <br>
+There are also interactive online tools like Academo¹¹ and PhET¹⁴ that allow you to visualize and understand the Gaussian distribution better.
 <br><br>
-(1) Law of large numbers - Wikipedia. https://en.wikipedia.org/wiki/Law_of_large_numbers.<br>
-(2) Law of Large Numbers | Strong and weak, with proofs and exercises. https://www.statlect.com/asymptotic-theory/law-of-large-numbers.<br>
-(3) Simulated Coin Tossing Experiments and the Law of Large Numbers. https://demonstrations.wolfram.com/SimulatedCoinTossingExperimentsAndTheLawOfLargeNumbers/.<br>
-(4) Law of Large Numbers - Data Science Discovery. https://discovery.cs.illinois.edu/learn/Simulation-and-Distributions/Law-of-Large-Numbers/.<br>
-(5) probability theory - proofing the strong law of large numbers .... https://math.stackexchange.com/questions/3068125/proofing-the-strong-law-of-large-numbers.<br>
-(6) Law of large numbers - Duke University. https://www2.stat.duke.edu/courses/Fall09/sta205/lec/lln.pdf.<br>
-(7) Law of Large Numbers - Statistics By Jim. https://statisticsbyjim.com/basics/law-of-large-numbers/.<br>
-(8) Interactive Applet – Law of Large Numbers - University of Florida. https://bolt.mph.ufl.edu/2013/01/07/interactive-applet-law-of-large-numbers/.<br>
-(9) undefined. http://demonstrations.wolfram.com/SimulatedCoinTossingExperimentsAndTheLawOfLargeNumbers/.<br>
-    
+(1) Normal distribution - Wikipedia. https://en.wikipedia.org/wiki/Normal_distribution.<br>
+(2) Gaussian Distribution Definition | DeepAI. https://deepai.org/machine-learning-glossary-and-terms/gaussian-distribution.<br>
+(3) Normal Distribution: What It Is, Properties, Uses, and Formula. https://www.investopedia.com/terms/n/normaldistribution.asp.<br>
+(4) Gaussian (Normal) Distribution | Academo.org - Free, interactive .... https://academo.org/demos/gaussian-distribution/.<br>
+(5) Normal Distribution - MATLAB & Simulink - MathWorks. https://www.mathworks.com/help/stats/normal-distribution.html.<br>
+(6) Derivation of Gaussian Probability Distribution A New Approach. https://www.scirp.org/journal/paperinformation.aspx?paperid=100627.<br>
+(7) Plinko Probability - Probability - PhET Interactive Simulations. https://phet.colorado.edu/en/simulation/plinko-probability.<br>
+(8) Gaussian distribution - Math.net. https://www.math.net/gaussian-distribution.<br>
+(9) GAUSSIAN DISTRIBUTION definition and meaning | Collins English Dictionary. https://www.collinsdictionary.com/dictionary/english/gaussian-distribution.<br>
+(10) Gaussian distribution Definition & Meaning - Merriam-Webster. https://www.merriam-webster.com/dictionary/Gaussian%20distribution.<br>
+(11) statistics - How was the normal distribution derived? - Mathematics .... https://math.stackexchange.com/questions/384893/how-was-the-normal-distribution-derived.<br>
+(12) Derivation of Gaussian Distribution from Binomial - University of Bath. https://people.bath.ac.uk/pam28/Paul_Milewski,_Professor_of_Mathematics,_University_of_Bath/Past_Teaching_files/stirling.pdf.<br>
+(13) Three Derivations of the Gaussian Distribution — Amateur Hour. https://alanhdu.github.io/posts/2019-10-21-normal-distribution-derivation/.<br>
+(14) normal distribution - How to simulate from a Gaussian copula? - Cross .... https://stats.stackexchange.com/questions/37424/how-to-simulate-from-a-gaussian-copula.<br>
                     <br>
                     <br>
                 </label>
