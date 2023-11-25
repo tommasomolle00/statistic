@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>The functional CLT</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        
+    </style>
+</head>
+  
+<body>
+    <h1>The functional CLT</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+          <label>
+Donsker's theorem, also known as Donsker's invariance principle or the functional central limit theorem (CLT), is a functional extension of the central limit theorem¹.<br>
+It's named after Monroe D. Donsker and is used in probability theory¹.<br><br>
+
+Let's consider a sequence of independent and identically distributed (i.i.d.) random variables with mean 0 and variance 1¹. Define the diffusively rescaled random walk (partial-sum process) by¹:<br><br>
+$$S_n(t) = \frac{1}{\sqrt{n}} \sum_{k=1}^{[nt]} X_k$$ 
+<br><br>
+The central limit theorem asserts that $S_n(1)$ converges in distribution to a standard Gaussian random variable as $n$ approaches infinity¹.<br>
+Donsker's invariance principle extends this convergence to the whole function $S_n$¹. More precisely, Donsker's invariance principle states that¹:<br><br>
+$$S_n \xrightarrow{d} W$$
+<br><br>
+As random variables taking values in the Skorokhod space, the random function $S_n$ converges in distribution to a standard Brownian motion $W$ as $n$ approaches infinity¹.<br><br>
+
+The proof of Donsker's theorem is quite involved and requires a deep understanding of measure theory, probability theory, and functional analysis¹. <br>
+The original proof was given by Donsker in 1951, and since then, several different proofs have been proposed¹.<br>
+
+As for simulations, you can simulate Donsker's invariance principle using a computer program. <br>
+For example, in Python, you can simulate a random walk and its limiting Brownian motion using the numpy and matplotlib libraries¹. <br>
+Here is a simple example:<br>
+
+<pre><code>
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Number of random walks
+num_walks = 5
+
+# Number of steps in each random walk
+num_steps = 1000
+
+# Generate the random walks
+random_walks = np.cumsum(np.random.normal(size=(num_walks, num_steps)), axis=1)
+
+# Generate the time values
+t = np.arange(num_steps)
+
+# Plot the random walks
+for i in range(num_walks):
+    plt.plot(t, random_walks[i])
+
+plt.title('Random Walks')
+plt.show()
+
+</pre></code>
+This code generates `num_walks` random walks, each consisting of `num_steps` steps. <br>
+Each step is a normally distributed random variable, and the random walk is the cumulative sum of these steps¹. <br>
+The resulting plot shows the random walks, which should converge to a Brownian motion as `num_steps` increases¹.<br>
+<br><br>
+
+(1) Donsker's theorem - Wikipedia. https://en.wikipedia.org/wiki/Donsker%27s_theorem.<br>
+(2) LECTURE NOTES ON DONSKER’S THEOREM - University of Utah. https://www.math.utah.edu/~davar/ps-pdf-files/donsker.pdf.<br>
+(3) THE WIENER MEASURE AND DONSKER’S INVARIANCE PRINCIPLE. https://math.uchicago.edu/~may/REU2019/REUPapers/Schondorf.pdf.<br>
+(4) Extension of Donsker’s Invariance Principle with Incomplete Partial-Sum .... https://arxiv.org/pdf/1912.07215.pdf.<br>
+
+                    <br>
+                    <br>
+                </label>
+                </b>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
