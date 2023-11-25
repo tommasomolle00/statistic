@@ -12,7 +12,7 @@
     <meta http-equiv='cache-control' content='no-cache'> 
     <meta http-equiv='expires' content='0'> 
     <meta http-equiv='pragma' content='no-cache'>
-    <title>Online Algorithms</title>
+    <title>The Poisson process</title>
     <style>
         h1 {
             text-align: center;
@@ -40,30 +40,35 @@
 </head>
   
 <body>
-    <h1>Online Algorithms</h1>
+    <h1>The Poisson process</h1>
     <a href="index.html">Home</a>
 <ul>
     <form>
           <label>
-Online algorithms in the context of data streams are a subset of machine learning algorithms designed to process data that arrive in a sequential order, such as in a stream¹².<br>
-These algorithms have the following characteristics¹²:<br>
-1. They use only a limited possibility to store past data.<br>
-2. They adapt their models to concept drift on the fly.<br>
-3. They work in a distributed computational environment.<br><br>
+The Poisson process is a mathematical model that describes the occurrence of events in a fixed interval of time or space¹².<br>
+It's named after the French mathematician Siméon Denis Poisson and is used in various fields such as telecommunications, traffic engineering, and computational biology¹².<br><br>
 
-The most important ideas for online algorithms include classification, regression, recommendation, and unsupervised modeling from streaming data¹. <br>
-These algorithms are implemented in various distributed data stream processing systems¹.<br><br>
+Here are some key properties of the Poisson process¹²:<br>
+1. Independence: The numbers of events in non-overlapping intervals are independent⁴.<br>
+2. Stationarity: The distribution of the number of arrivals between any two points in time depends only on the length of the time interval, not on the starting point².<br>
+3. Memorylessness: The time until the next event does not depend on when the previous event happened¹². This property is deeply connected to the exponential distribution, which is memoryless².<br>
+4. Arrival Rate: For any interval of size t, λt is the expected number of arrivals in that interval¹. Thus λ is called the arrival rate of the process¹.<br><br>
 
-As for code, it's important to note that the specific implementation would depend on the problem at hand and the programming language used.<br>
-However, most online algorithms follow a similar structure:<br>
-1. Initialize the model parameters.<br>
-2. For each piece of data in the stream:<br>
-   - Make a prediction based on the current model parameters.<br>
-   - Update the model parameters based on the prediction error.<br><br>
+A Poisson process can be simulated using a computer program. The basic steps are as follows²:<br>
+1. Initialize a counter (N) to zero.<br>
+2. Generate an exponentially distributed random number (T) with rate λ.<br>
+3. If T is less than the desired time window, increment N and add another exponentially distributed random number to T.<br>
+4. Repeat step 3 until T exceeds the desired time window.<br>
+5. N is now a random variable with a Poisson distribution, representing the number of events in the time window.<br><br>
 
-(1) [1802.05872] Online Machine Learning in Big Data Streams - arXiv.org. https://arxiv.org/abs/1802.05872.<br>
-(2) Online Machine Learning Algorithms over Data Streams. https://link.springer.com/referenceworkentry/10.1007/978-3-319-77525-8_329.<br>
-(3) Online Algorithms - Department of Computer Science, University of Toronto. https://www.cs.toronto.edu/~bor/2420s19/papers/draft-ch1-8.pdf.<br>
+This simulation procedure is based on the properties of the Poisson process and the exponential distribution².<br>
+            It's a simple yet powerful method for modeling random events in time or space².<br>
+
+(1) 2.2: Definition and Properties of a Poisson Process. https://eng.libretexts.org/Bookshelves/Electrical_Engineering/Signal_Processing_and_Modeling/Discrete_Stochastic_Processes_%28Gallager%29/02%3A_Poisson_Processes/2.02%3A_Definition_and_Properties_of_a_Poisson_Process.<br>
+(2) 7.1 Poisson Process | Simulation and Modelling to Understand Change. https://bookdown.org/manuele_leonelli/SimBook/poisson-process.html.<br>
+(3) Poisson Process -- from Wolfram MathWorld. https://mathworld.wolfram.com/PoissonProcess.html.<br>
+(4) Poisson Process - What Is It, Examples, Properties, Applications. https://www.wallstreetmojo.com/poisson-process/.<br>
+(5) 12 The Poisson process - University of Utah College of Engineering. https://my.eng.utah.edu/~cs5961/Resources/StatTextBook.pdf/ch12.pdf.<br>
                     <br>
                     <br>
                 </label>
