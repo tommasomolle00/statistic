@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>Ito Integration and Calculus</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        
+    </style>
+</head>
+  
+<body>
+    <h1>Ito Integration and Calculus</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+          <label>
+Itô calculus, named after Kiyosi Itô, extends the methods of calculus to stochastic processes such as Brownian motion².<br>
+            It has important applications in mathematical finance and stochastic differential equations².<br><br>
+
+The central concept is the Itô stochastic integral, a stochastic generalization of the Riemann–Stieltjes integral in analysis². <br>
+The integrands and the integrators are now stochastic processes². The result of the integration is then another stochastic process².<br>
+Concretely, the integral from 0 to any particular t is a random variable, defined as a limit of a certain sequence of random variables².<br><br>
+
+The paths of Brownian motion fail to satisfy the requirements to be able to apply the standard techniques of calculus². <br>
+So with the integrand a stochastic process, the Itô stochastic integral amounts to an integral with respect to a function which is not differentiable at any point and has infinite variation over every time interval².<br>
+The main insight is that the integral can be defined as long as the integrand H is adapted, which loosely speaking means that its value at time t can only depend on information available up until this time².<br><br>
+
+Roughly speaking, one chooses a sequence of partitions of the interval from 0 to t and constructs Riemann sums².<br>
+Every time we are computing a Riemann sum, we are using a particular instantiation of the integrator². <br>
+It is crucial which point in each of the small intervals is used to compute the value of the function². <br>
+The limit then is taken in probability as the mesh of the partition is going to zero².<br>
+Numerous technical details have to be taken care of to show that this limit exists and is independent of the particular sequence of partitions². Typically, the left end of the interval is used².<br><br>
+
+Important results of Itô calculus include the integration by parts formula and Itô's lemma, which is a change of variables formula². <br>
+These differ from the formulas of standard calculus, due to quadratic variation terms².<br><br>
+
+In mathematical finance, the described evaluation strategy of the integral is conceptualized as that we are first deciding what to do, then observing the change in the prices².<br>
+The integrand is how much stock we hold, the integrator represents the movement of the prices, and the integral is how much money we have in total including what our stock is worth, at any given moment².<br><br>
+
+As for simulations, unfortunately, I can't provide specific code examples in this response.<br>
+However, there are many resources available online, including libraries and packages in languages like Python and R, that provide implementations of Itô calculus for stochastic processes.<br>
+It's also worth noting that understanding the underlying principles of these algorithms is crucial for effectively using and adapting them to specific use cases.<br><br>
+
+(1) Itô calculus - Wikipedia. https://en.wikipedia.org/wiki/It%C3%B4_calculus.<br>
+(2) 1 The Ito integral - New York University. https://math.nyu.edu/~goodman/teaching/DerivSec10/notes/week6.pdf.<br>
+(3) Lesson 3, Ito integral 1 Introduction - New York University. https://math.nyu.edu/~goodman/teaching/StochCalc2018/notes/Lesson3.pdf.<br>
+(4) undefined. http://www.math.nyu.edu/faculty/goodman/teaching/DerivSec10/resources.html.<br>
+                    <br>
+                    <br>
+                </label>
+                </b>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
