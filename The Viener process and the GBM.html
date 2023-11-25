@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+<script>
+  Prism.highlightAll();
+</script>
+
+<head>
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>The Viener process and the GBM</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 34px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            font-size: 20px;
+            color: blue;
+            text-decoration: none;
+        }
+        
+        label {
+            font-size: 20px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        p{
+          font-size:20px;
+        }
+        
+    </style>
+</head>
+  
+<body>
+    <h1>The Viener process and the GBM</h1>
+    <a href="index.html">Home</a>
+<ul>
+    <form>
+          <label>
+The Wiener process, also known as Brownian motion, is a real-valued continuous-time stochastic process named in honor of American mathematician Norbert Wiener¹. <br>
+It's one of the best known Lévy processes and occurs frequently in pure and applied mathematics, economics, quantitative finance, evolutionary biology, and physics¹.<br><br>
+
+The Wiener process is characterized by the following properties¹:<br>
+1. W0 = 0 almost surely¹.<br>
+2. W has independent increments: for every t > 0, the future increments Wt + u − Wt, u ≥ 0, are independent of the past values Ws, s < t¹.<br>
+3. W has Gaussian increments: Wt + u − Wt is normally distributed with mean 0 and variance u¹.<br><br>
+
+A geometric Brownian motion (GBM), also known as exponential Brownian motion, is a continuous-time stochastic process in which the logarithm of the randomly varying quantity follows a Brownian motion (also called a Wiener process) with drift⁶.<br>
+It is an important example of stochastic processes satisfying a stochastic differential equation (SDE); in particular, it is used in mathematical finance to model stock prices in the Black–Scholes model⁶.<br><br>
+
+A stochastic process St is said to follow a GBM if it satisfies the following stochastic differential equation (SDE)⁶:<br>
+dSt = μSt dt + σSt dWt<br>
+where Wt is a Wiener process or Brownian motion, and μ ('the percentage drift') and σ ('the percentage volatility') are constants⁶.<br>
+The former parameter is used to model deterministic trends, while the latter parameter models unpredictable events occurring during the motion⁶.<br><br>
+
+For an arbitrary initial value S0 the above SDE has the analytic solution (under Itô's interpretation)⁶:<br>
+St = S0 exp((μ - σ²/2)t + σWt)<br>
+The derivation requires the use of Itô calculus⁶.<br><br>
+
+Simulating a Wiener process or a GBM can be done using a computer program.<br>
+For example, in Python, you can simulate a GBM using the numpy and matplotlib libraries⁶. Here is a simple example:<br>
+
+<pre><code>
+import numpy as np
+import matplotlib.pyplot as plt
+
+mu = 1
+n = 50
+dt = 0.1
+x0 = 100
+np.random.seed(1)
+sigma = np.arange(0.8, 2, 0.2)
+
+x = np.exp((mu - sigma ** 2 / 2) * dt 
+           + sigma * np.random.normal(0, np.sqrt(dt), size=(len(sigma), n)).T)
+x = np.vstack([np.ones(len(sigma)), x])
+x = x0 * x.cumprod(axis=0)
+
+plt.plot(x)
+plt.legend(np.round(sigma, 2))
+plt.xlabel("$t$")
+plt.ylabel("$x$")
+plt.title("Realizations of Geometric Brownian Motion with different variances\\n $\\mu=1$")
+plt.show()
+</pre></code>
+<br>
+This code generates realizations of a Geometric Brownian Motion with different variances⁶.<br><br>
+
+
+(1) Wiener process - Wikipedia. https://en.wikipedia.org/wiki/Wiener_process.<br>
+(2) Geometric Brownian motion - Wikipedia. https://en.wikipedia.org/wiki/Geometric_Brownian_motion.<br>
+(3) Lecture 6: Wiener Process - Woods Hole Oceanographic Institution. https://www.whoi.edu/fileserver.do?id=21268&pt=10&p=17232.<br>
+(4) Wiener Process Dynamical theories of Brownian motion - Springer. https://link.springer.com/content/pdf/10.1057/978-1-349-95121-5_1539-2.pdf.<br>
+(5) Wiener Process - Brin MRC. https://home.cscamm.umd.edu/lectures/files/EVandenLectures_final.pdf.<br>
+(6) Classical Wiener space - Wikipedia. https://en.wikipedia.org/wiki/Classical_Wiener_space.<br>
+(7) 1 Simulating Brownian motion (BM) and geometric Brownian motion (GBM). http://www.columbia.edu/~ks20/4404-Sigman/4404-Notes-sim-BM.pdf.<br>
+(8) Steve’s Data Tips and Tricks - Geometric Brownian Motion with {healthyR.ts}. https://www.spsanderson.com/steveondata/posts/rtip-2023-01-18/index.html.<br>
+(9) R: Geometric Brownian Motion - search.r-project.org. https://search.r-project.org/CRAN/refmans/healthyR.ts/html/ts_geometric_brownian_motion.html.<br>
+(10) Geometric Brownian motion - Wikiwand. https://www.wikiwand.com/en/Geometric_Brownian_motion.<br>
+(11) github.com. https://github.com/gfunk723/portfolio_management/tree/d4a607907a2f0ccc0a91996c25f7ccac50548f77/OptionsCalc%2FtestGBM.py.<br>
+                    <br>
+                    <br>
+                </label>
+                </b>
+            </li>
+        </ol>
+    </form>
+</body>
+</html>
